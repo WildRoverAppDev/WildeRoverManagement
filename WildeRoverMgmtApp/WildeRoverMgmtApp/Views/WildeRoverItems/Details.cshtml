@@ -1,0 +1,119 @@
+@model WildeRoverMgmtApp.Models.WildeRoverItem
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>WildeRoverItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Par)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Par)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Have)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Have)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InventoryCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(Model => Model.InventoryCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DefaultVendorItem)
+        </dt>        
+            @if (Model.DefaultVendorItem == null)
+            {
+                <dd>NULL</dd>
+            }
+            else
+            {
+                <dd>@Html.DisplayFor(model => model.DefaultVendorItem.Vendor.Name)</dd>
+            }
+    </dl>
+</div>
+<div>
+    @Html.DisplayFor(model => model.VendorItems.Count)
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Vendor.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PackSize)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Price)
+                </th>
+                <th>
+                    PPU
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.VendorItems == null)
+            {
+                <tr>
+                    <td>
+                        NULL
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var vi in Model.VendorItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(i => vi.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => vi.Vendor.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => vi.PackSize)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => vi.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(i => vi.PPU);
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.WildeRoverItemId">Edit</a> |
+    <a href="javascript:history.go(-1)">Back</a>
+</div>
