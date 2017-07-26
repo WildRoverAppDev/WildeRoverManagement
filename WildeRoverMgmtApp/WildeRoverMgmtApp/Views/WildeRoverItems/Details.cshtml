@@ -80,7 +80,7 @@
             {
                 <tr>
                     <td>
-                        NULL
+                        @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PPU)
                     </td>
                 </tr>
             }
@@ -102,7 +102,7 @@
                             @Html.DisplayFor(i => vi.Price)
                         </td>
                         <td>
-                            @Html.DisplayFor(i => vi.PPU);
+                            @Html.DisplayFor(i => vi.PPU)
                         </td>
                     </tr>
                 }
