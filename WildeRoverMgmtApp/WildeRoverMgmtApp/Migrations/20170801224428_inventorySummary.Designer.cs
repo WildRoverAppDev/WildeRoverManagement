@@ -8,9 +8,10 @@ using WildeRoverMgmtApp.Models;
 namespace WildeRoverMgmtApp.Migrations
 {
     [DbContext(typeof(WildeRoverMgmtAppContext))]
-    partial class WildeRoverMgmtAppContextModelSnapshot : ModelSnapshot
+    [Migration("20170801224428_inventorySummary")]
+    partial class inventorySummary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -35,17 +36,17 @@ namespace WildeRoverMgmtApp.Migrations
 
                     b.Property<int>("Count");
 
-                    b.Property<int>("InventorySummaryId");
+                    b.Property<int?>("InventorySummaryId");
 
-                    b.Property<int>("WildeRoverItemId");
+                    b.Property<int?>("ItemWildeRoverItemId");
 
                     b.HasKey("ItemCountId");
 
                     b.HasIndex("InventorySummaryId");
 
-                    b.HasIndex("WildeRoverItemId");
+                    b.HasIndex("ItemWildeRoverItemId");
 
-                    b.ToTable("ItemCounts");
+                    b.ToTable("ItemCount");
                 });
 
             modelBuilder.Entity("WildeRoverMgmtApp.Models.Vendor", b =>
@@ -116,15 +117,13 @@ namespace WildeRoverMgmtApp.Migrations
 
             modelBuilder.Entity("WildeRoverMgmtApp.Models.ItemCount", b =>
                 {
-                    b.HasOne("WildeRoverMgmtApp.Models.InventorySummary", "InventorySummary")
+                    b.HasOne("WildeRoverMgmtApp.Models.InventorySummary")
                         .WithMany("Inventory")
-                        .HasForeignKey("InventorySummaryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("InventorySummaryId");
 
                     b.HasOne("WildeRoverMgmtApp.Models.WildeRoverItem", "Item")
                         .WithMany()
-                        .HasForeignKey("WildeRoverItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ItemWildeRoverItemId");
                 });
 
             modelBuilder.Entity("WildeRoverMgmtApp.Models.VendorItem", b =>
