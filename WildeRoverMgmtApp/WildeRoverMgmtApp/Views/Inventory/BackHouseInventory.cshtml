@@ -1,0 +1,42 @@
+﻿@model List<WildeRoverMgmtApp.Models.WildeRoverItem>
+
+@{
+    ViewData["Title"] = "Back House Inventory";
+}
+
+<h2>Back of House Inventory</h2>
+
+<form asp-action="BackHouseInventory">
+    <table class="table-striped">
+        <thead>
+            <tr style="">
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+                </th>
+                <th>
+                    Count
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="form-group">
+                    <td>
+                        <a class="btn" asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@item.WildeRoverItemId" style="text-decoration: none">
+                            @Html.DisplayFor(n => item.Name)
+                        </a>
+                    </td>
+                    <td>
+                        <input type="hidden" asp-for="@item.WildeRoverItemId" />
+                        @Html.EditorFor(c => item.InventoryCount, new { @type = "number", min = "0" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="btn btn-group">
+        <input type="button" class="btn btn-primary" style="text-decoration:none" value="Save" />
+        <input type="submit" class="btn btn-success" style="text-decoration:none" value="Submit" />
+    </div>
+</form>

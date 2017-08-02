@@ -130,5 +130,45 @@ namespace WildeRoverMgmtApp.Controllers
             return View(fhivm);
         }
 
+        //GET
+        public async Task<IActionResult> BackHouseInventory()
+        {
+            var items = from i in _context.WildeRoverItem
+                        where i.ItemHouse == WildeRoverItem.House.back
+                        orderby i.Type, i.Name
+                        select i;
+
+            //FrontHouseInventoryViewModel fhivm = new FrontHouseInventoryViewModel();
+            //fhivm.Inventory = await items.ToListAsync();
+
+            return View(await items.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BackHouseInventory(List<WildeRoverItem> bhivm)
+        {
+            if (bhivm == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    foreach (var item in bhivm)
+                    {
+                        _context.Update(item);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            return View(bhivm);
+        }
     }
 }

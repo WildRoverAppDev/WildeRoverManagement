@@ -9,7 +9,7 @@
 <div>
     <h4>WildeRoverItem</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -35,10 +35,16 @@
             @Html.DisplayFor(model => model.Type)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.SubType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SubType)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.InventoryCount)
         </dt>
         <dd>
-            @Html.DisplayFor(Model => Model.InventoryCount)
+            @Html.DisplayFor(model => model.InventoryCount)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DefaultVendorItem)
@@ -50,12 +56,12 @@
             else
             {
                 <dd>@Html.DisplayFor(model => model.DefaultVendorItem.Vendor.Name)</dd>
-            }
+            }  
     </dl>
 </div>
 <div>
     @Html.DisplayFor(model => model.VendorItems.Count)
-    <table class="table-striped">
+    <table class="table-condensed">
         <thead>
             <tr>
                 <th>
@@ -75,45 +81,47 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            @if (Model.VendorItems == null)
+    <tbody>
+        @if (Model.VendorItems == null)
             {
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PPU)
+                </td>
+            </tr>
+        }
+        else
+        {
+
+            @foreach (var vi in Model.VendorItems)
+                {
                 <tr>
                     <td>
-                        @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PPU)
+                        @Html.DisplayFor(i => vi.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(i => vi.Vendor.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(i => vi.PackSize)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(i => vi.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(i => vi.PPU)
                     </td>
                 </tr>
             }
-            else
-            {
-                @foreach (var vi in Model.VendorItems)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(i => vi.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(i => vi.Vendor.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(i => vi.PackSize)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(i => vi.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(i => vi.PPU)
-                        </td>
-                    </tr>
-                }
 
-            }
+        }
 
         </tbody>
     </table>
 
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.WildeRoverItemId">Edit</a> |
-    <a href="javascript:history.go(-1)">Back</a>
+<div class="btn-group">
+    <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.WildeRoverItemId">Edit</a>
+    <a class="btn btn-danger" style="text-decoration:none" asp-action="Delete" asp-route-id="@Model.WildeRoverItemId">Delete</a>
+    <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
 </div>

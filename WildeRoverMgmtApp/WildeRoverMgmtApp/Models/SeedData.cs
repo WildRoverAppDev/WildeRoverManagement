@@ -93,6 +93,7 @@ namespace WildeRoverMgmtApp.Models
                     Par = 60,
                     Have = 40,
                     Type = "Beer",
+                    SubType = "Bottle",
                     ItemHouse = WildeRoverItem.House.front,
                 },
 
@@ -102,6 +103,7 @@ namespace WildeRoverMgmtApp.Models
                     Par = 50,
                     Have = 30,
                     Type = "Beer",
+                    SubType = "Bottle",
                     ItemHouse = WildeRoverItem.House.front,
                 },
 
@@ -110,7 +112,8 @@ namespace WildeRoverMgmtApp.Models
                     Name = "Captain Morgan",
                     Par = 6,
                     Have = 5,
-                    Type = "Rum",
+                    Type = "Liquor",
+                    SubType = "Rum",
                     ItemHouse = WildeRoverItem.House.front,
                 },
 
@@ -119,7 +122,8 @@ namespace WildeRoverMgmtApp.Models
                     Name = "Sky",
                     Par = 10,
                     Have = 7,
-                    Type = "Vodka",
+                    Type = "Liquor",
+                    SubType = "Vodka",
                     ItemHouse = WildeRoverItem.House.front,
                 },
 
@@ -129,6 +133,7 @@ namespace WildeRoverMgmtApp.Models
                     Par = 5,
                     Have = 3,
                     Type = "Wine",
+                    SubType = "White",
                     ItemHouse = WildeRoverItem.House.front,
                 },
 
@@ -137,7 +142,8 @@ namespace WildeRoverMgmtApp.Models
                     Name = "Hennessy",
                     Par = 3,
                     Have = 3,
-                    Type = "Cognac",
+                    Type = "Liquor",
+                    SubType = "Cognac",
                     ItemHouse = WildeRoverItem.House.front,
                 }
             );

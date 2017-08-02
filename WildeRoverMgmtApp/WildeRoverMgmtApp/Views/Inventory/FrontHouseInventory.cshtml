@@ -4,13 +4,13 @@
     ViewData["Title"] = "Front House Inventory";
 }
 
-<h2>Front House Inventory</h2>
+<h2>Front of House Inventory</h2>
 
 @using (Html.BeginForm("FrontHouseInventory", "Inventory", FormMethod.Post))
 {
     <table class="table-striped">
         <thead>
-            <tr>
+            <tr style="">
                 <th>
                     @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
                 </th>
