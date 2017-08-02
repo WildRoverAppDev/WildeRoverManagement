@@ -8,9 +8,10 @@ using WildeRoverMgmtApp.Models;
 namespace WildeRoverMgmtApp.Migrations
 {
     [DbContext(typeof(WildeRoverMgmtAppContext))]
-    partial class WildeRoverMgmtAppContextModelSnapshot : ModelSnapshot
+    [Migration("20170802031801_AddWRItemIdToItemCount")]
+    partial class AddWRItemIdToItemCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

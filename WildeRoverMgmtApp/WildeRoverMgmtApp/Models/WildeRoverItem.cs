@@ -9,7 +9,12 @@ namespace WildeRoverMgmtApp.Models
 {
     public partial class WildeRoverItem : IInventoriable, IOrderable, IComparable<WildeRoverItem>
     {
-        public enum House { front, back };
+        public enum House
+        {
+            front = 1,
+            back = 2,
+            both = 4
+        };
 
         public WildeRoverItem()
         {

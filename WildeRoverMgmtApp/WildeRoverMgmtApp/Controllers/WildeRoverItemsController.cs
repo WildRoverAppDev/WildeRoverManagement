@@ -42,21 +42,21 @@ namespace WildeRoverMgmtApp.Controllers
                 return NotFound();
             }
 
-            var wildeRoverItem = await _context.WildeRoverItem
+            var wildeRoverItem = await _context.WildeRoverItem.Include(i => i.VendorItems)
                 .SingleOrDefaultAsync(m => m.WildeRoverItemId == id);
             if (wildeRoverItem == null)
             {
                 return NotFound();
             }
 
-            var vendorItems = from vi in _context.VendorItem
-                              where vi.WildeRoverItemId == wildeRoverItem.WildeRoverItemId
-                              select vi;
+            //var vendorItems = from vi in _context.VendorItem
+            //                  where vi.WildeRoverItemId == wildeRoverItem.WildeRoverItemId
+            //                  select vi;
 
-            foreach (var vi in vendorItems)
-            {
-                wildeRoverItem.VendorItems.Add(vi);
-            }
+            //foreach (var vi in vendorItems)
+            //{
+            //    wildeRoverItem.VendorItems.Add(vi);
+            //}
 
                 return View(wildeRoverItem);
         }
@@ -97,9 +97,6 @@ namespace WildeRoverMgmtApp.Controllers
             {
                 return NotFound();
             }
-
-
-            
 
             return View(wildeRoverItem);
         }

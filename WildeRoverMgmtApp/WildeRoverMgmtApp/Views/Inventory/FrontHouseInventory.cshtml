@@ -1,4 +1,4 @@
-@model List<WildeRoverMgmtApp.Models.WildeRoverItem>
+@model WildeRoverMgmtApp.Models.FrontHouseInventoryViewModel
 
 @{
     ViewData["Title"] = "Front House Inventory";
@@ -6,36 +6,26 @@
 
 <h2>Front House Inventory</h2>
 
-<form asp-action="FrontHouseInventory">
+@using (Html.BeginForm("FrontHouseInventory", "Inventory", FormMethod.Post))
+{
     <table class="table-striped">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Name)
+                    @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
                 </th>
                 <th>
-                    Count
+                    @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Count)
                 </th>
             </tr>
         </thead>
-        <tbody>
-            @foreach(var item in Model)
-            {
-                <tr class="form-group">                    
-                    <td>
-                        <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@item.WildeRoverItemId">
-                            @Html.DisplayFor(n => item.Name)
-                        </a>
-                    </td>
-                    <td>
-                        <input type="hidden" asp-for="@item.WildeRoverItemId" />
-                        @Html.EditorFor(c => item.InventoryCount, new { @type="number", min="0" })                        
-                    </td>
-                </tr>
-            }
-
+        <tbody id="childtable">
+            @Html.EditorFor(model => Model.Inventory)
         </tbody>
     </table>
-
-    <input type="submit" value="Save" class="btn-default" />
-</form>
+    <p>
+        <input type="submit" value="Save" />
+        <asp:Button ID="Reset_Button" runat="server" Text="Reset"
+                    Width="81px" OnClientClick="this.form.reset();return false;" />
+    </p>
+}
