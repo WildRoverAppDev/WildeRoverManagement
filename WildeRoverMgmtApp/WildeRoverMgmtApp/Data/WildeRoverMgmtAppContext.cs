@@ -21,6 +21,9 @@ namespace WildeRoverMgmtApp.Models
 
         public DbSet<WildeRoverMgmtApp.Models.Vendor> Vendor { get; set; }
 
-        //public DbSet<WildeRoverMgmtApp.Models.InventorySummary> Inventory { get; set; }
+        public DbSet<WildeRoverMgmtApp.Models.ItemCount> ItemCounts { get; set; }
+
+        public DbSet<WildeRoverMgmtApp.Models.InventorySummary> InventoryLog { get; set; }
+
     }
 }
