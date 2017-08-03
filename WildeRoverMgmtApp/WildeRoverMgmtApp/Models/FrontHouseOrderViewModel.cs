@@ -7,6 +7,6 @@ namespace WildeRoverMgmtApp.Models
 {
     public class FrontHouseOrderViewModel
     {
-        public List<WildeRoverItem> Items;
+        public List<VendorItem> Items { get; set; }
     }
 }

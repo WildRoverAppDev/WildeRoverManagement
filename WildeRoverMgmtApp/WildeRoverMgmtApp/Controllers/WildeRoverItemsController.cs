@@ -72,7 +72,7 @@ namespace WildeRoverMgmtApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WildeRoverItemId,Name,Par,Have,Type")] WildeRoverItem wildeRoverItem)
+        public async Task<IActionResult> Create([Bind("WildeRoverItemId,Name,Par,Have,Type, SubType")] WildeRoverItem wildeRoverItem)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace WildeRoverMgmtApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WildeRoverItemId,Name,Par,Have,Type")] WildeRoverItem wildeRoverItem)
+        public async Task<IActionResult> Edit(int id, [Bind("WildeRoverItemId,Name,Par,Have,Type,SubType")] WildeRoverItem wildeRoverItem)
         {
             if (id != wildeRoverItem.WildeRoverItemId)
             {

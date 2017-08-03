@@ -4,52 +4,73 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>WildeRover Items</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Par)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Have)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.WildeRoverItemId">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </a>                
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Par)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Have)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WildeRoverItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WildeRoverItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WildeRoverItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<body>
+    <div>
+        <table class="table table-hover table-condensed">
+            <!--Table head-->
+            <thead class="thead-inverse">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Par)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Have)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubType)
+                    </th>
+                </tr>
+            </thead>
+            <!--Table head-->
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            <a class="btn" style="text-decoration:none">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn">
+                                @Html.DisplayFor(modelItem => item.Par)
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn">
+                                @Html.DisplayFor(modelItem => item.Have)
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn">
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn">
+                                @Html.DisplayFor(modelItem => item.SubType)
+                            </a>
+                        </td>
+                        <td class="btn-group">
+                            <a class="btn btn-info" style="text-decoration:none" asp-action="Edit" asp-route-id="@item.WildeRoverItemId">Edit</a>
+                            <a class="btn btn-info" style="text-decoration:none" asp-action="Details" asp-route-id="@item.WildeRoverItemId">Info</a>
+                            <a class="btn btn-info" style="text-decoration:none" asp-action="Delete" asp-route-id="@item.WildeRoverItemId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

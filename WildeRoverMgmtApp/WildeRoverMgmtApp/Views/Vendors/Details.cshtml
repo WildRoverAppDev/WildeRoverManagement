@@ -36,7 +36,8 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.VendorId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="btn-group">
+    <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.VendorId">Edit</a>
+    <a class="btn btn-danger" style="text-decoration:none" asp-action="Delete" asp-route-id="@Model.VendorId">Delete</a>
+    <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
 </div>
