@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using WildeRoverMgmtApp.Models;
-
 namespace WildeRoverMgmtApp
 {
     public class Startup
