@@ -1,0 +1,42 @@
+@model IEnumerable<WildeRoverMgmtApp.Models.OrderSummary>
+
+    @{
+        ViewData["Title"] = "Order Log";
+    }
+
+    <h2>Order Log</h2>
+
+    <body>
+        <table class="table-hover table-condensed">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Completed)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="OrderSummary" asp-action="Details" asp-route-id="@log.OrderSummaryId">
+                                @Html.DisplayFor(modelItem => log.Date)
+                            </a>
+                        </td>
+                        @if (log.Completed)
+                        {
+                            <td>Yes</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </body>

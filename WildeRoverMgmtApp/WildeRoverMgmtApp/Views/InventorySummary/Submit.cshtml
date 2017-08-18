@@ -1,0 +1,46 @@
+@model WildeRoverMgmtApp.Models.InventorySubmitViewModel
+
+@{
+    ViewData["Title"] = "Submit";
+}
+
+<style type="text/css">
+    td {
+        padding: 0 10px 0 10px;
+    }
+
+    th {
+        padding: 0 10px 0 10px;
+    }
+</style>
+
+<h2>
+    @Html.DisplayFor(model => model.Summary.Date)
+</h2>
+
+@using (Html.BeginForm("Submit", "InventorySummary", FormMethod.Post))
+{
+    <div>
+        @Html.HiddenFor(model => model.InventorySummaryId)
+        @foreach (var kvp in Model.SubItems)
+        {
+            <p>
+                <h3>
+                    @Html.DisplayFor(model => kvp.Key)
+                </h3>
+                <div>
+                    <table class="table-striped">
+                        <tbody id="childtable">
+                            @Html.EditorFor(model => kvp.Value)
+                        </tbody>
+                    </table>
+                </div>
+            </p>
+        }
+    </div>
+    <p>
+        <input type="submit" value="SUBMIT" />
+    </p>
+}
+
+

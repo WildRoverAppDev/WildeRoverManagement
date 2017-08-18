@@ -1,7 +1,52 @@
+@model WildeRoverMgmtApp.Models.OrderViewModel
 
 @{
     ViewData["Title"] = "FrontHouseOrder";
 }
 
+<style type="text/css">
+    td {
+        padding: 0 10px 0 10px;
+    }
+
+    th {
+        padding: 0 10px 0 10px;
+    }
+</style>
+
+
+
 <h2>FrontHouseOrder</h2>
 
+@using (Html.BeginForm("FrontHouseOrder", "Order", FormMethod.Post))
+{
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.DefaultVendorItem.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Par)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Have)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Need)
+                </th>
+            </tr>
+        </thead>
+        <tbody id="childtable">
+            @Html.EditorFor(model => Model.OrderList)
+        </tbody>
+    </table>
+    <p>
+        <input type="submit" value="Save" />
+        <a class="btn-info" asp-controller="Order" asp-action="Reset">Reset</a>
+        <a class="btn-info" asp-controller="OrderSummary" asp-action="Submit" asp-route-id="@Model.OrderId">Submit</a>
+    </p>
+}

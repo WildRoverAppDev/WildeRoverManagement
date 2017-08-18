@@ -24,16 +24,6 @@ namespace WildeRoverMgmtApp.Controllers
             return View(await _context.WildeRoverItem.ToListAsync());
         }
 
-        // POST: 
-
-        public async Task<IActionResult> Blah()
-        {
-            var items = from item in _context.WildeRoverItem
-                        select item;
-
-            return View(await items.ToListAsync());
-        }
-
         // GET: WildeRoverItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {

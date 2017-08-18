@@ -1,0 +1,56 @@
+@model WildeRoverMgmtApp.Models.InventorySummary
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+<p>
+    @Html.DisplayFor(m => Model.Date)
+</p>
+<p>
+    @if (Model.Submitted)
+    {
+        <div>Inventory Submitted</div>
+    }
+    else
+    {
+        <div>Inventory NOT Submitted</div>
+    }
+</p>
+
+<table class="table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Count)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var itemCount in Model.Inventory)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@itemCount.Item.WildeRoverItemId">
+                        @Html.DisplayFor(m => itemCount.Item.Name)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(m => itemCount.Count)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    @if (!Model.Submitted)
+    {
+        <a class="btn-info" asp-controller="Inventory" asp-action="FrontHouseInventory">Edit</a>
+
+    }
+</p>
+

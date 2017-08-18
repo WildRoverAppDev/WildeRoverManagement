@@ -1,0 +1,16 @@
+
+@*
+   Editor Template for ItemCount
+*@
+
+@using WildeRoverMgmtApp.Models
+@model ItemCount
+
+<tr>
+    <td>
+        @Html.DisplayFor(model => model.Item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Count)
+    </td>
+</tr>

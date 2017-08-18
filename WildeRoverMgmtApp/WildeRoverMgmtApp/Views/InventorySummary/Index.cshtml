@@ -1,0 +1,42 @@
+@model IEnumerable<WildeRoverMgmtApp.Models.InventorySummary>
+
+@{
+    ViewData["Title"] = "Inventory Log";
+}
+
+<h2>Index</h2>
+
+<body>
+    <table class="table-hover table-condensed">
+        <thead class="thead-inverse">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Submitted)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var log in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="InventorySummary" asp-action="Details" asp-route-id="@log.InventorySummaryId">
+                            @Html.DisplayFor(modelItem => log.Date)
+                        </a>
+                    </td>
+                    @if (log.Submitted)
+                    {
+                        <td>Yes</td>
+                    }
+                    else
+                    {
+                        <td>No</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
