@@ -35,6 +35,7 @@ namespace WildeRoverMgmtApp.Controllers
             }
 
             var order = await (from o in _context.OrderLog.Include("OrderList.Item")
+                               where o.OrderSummaryId == id
                                select o).SingleOrDefaultAsync();
 
             if (order == null) return NotFound();
