@@ -1,0 +1,29 @@
+
+@*
+   Editor Template for ItemCount
+*@
+
+@using WildeRoverMgmtApp.Models
+@model ItemCount
+
+<tr>
+    <td>
+        @Html.HiddenFor(model => model.ItemCountId)
+        @Html.HiddenFor(model => model.WildeRoverItemId)
+        <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
+            @Html.DisplayFor(model => model.Item.Name)
+        </a>
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Item.DefaultVendorItem.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Item.Par)
+    </td>
+    <td>
+        @Html.DisplayFor(model => model.Item.Have)
+    </td>
+    <td>
+       @Html.EditorFor(model => model.Count, new {htmlAttributes = new {@type="number", @value="@Model.Count"}})
+    </td>
+</tr>

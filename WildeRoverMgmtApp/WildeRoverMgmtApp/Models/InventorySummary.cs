@@ -17,6 +17,7 @@ namespace WildeRoverMgmtApp.Models
         [Key]
         public int InventorySummaryId { get; set; }
         public DateTime Date { get; set; }
+        public bool Submitted { get; set; }
         public virtual List<ItemCount> Inventory { get; set; }
     }
 }

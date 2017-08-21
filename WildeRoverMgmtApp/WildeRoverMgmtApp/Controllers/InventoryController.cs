@@ -20,21 +20,22 @@ namespace WildeRoverMgmtApp.Controllers
 
             //Get latest inventory summary if it exists
             var current = (from i in _context.InventoryLog.Include("Inventory.Item")
-                           where i.Date.Date == DateTime.Now.Date
-                           select i).SingleOrDefault();
+                           orderby i.Date descending
+                           select i).FirstOrDefault();
 
             //No inventory log created for the day
-            if (current == null)
+            if (current == null || current.Submitted)
             {
                 _summary = new InventorySummary();
                 _summary.Date = DateTime.Now;
+                _summary.Submitted = false;
 
                 _context.InventoryLog.Add(_summary);
                 _context.SaveChanges();
 
                 _summary = (from i in _context.InventoryLog.Include("Inventory.Item")
-                            where i.Date.Date == DateTime.Now.Date
-                            select i).SingleOrDefault();
+                            orderby i.Date descending
+                            select i).FirstOrDefault();
 
                 //populate summary
                 var items = (from i in _context.WildeRoverItem
@@ -51,6 +52,7 @@ namespace WildeRoverMgmtApp.Controllers
 
                     temp.InventorySummary = _summary;
                     temp.InventorySummaryId = _summary.InventorySummaryId;
+                    temp.OrderSummary = null;
 
                     _context.ItemCounts.Add(temp);
                     _summary.Inventory.Add(temp);
@@ -74,24 +76,48 @@ namespace WildeRoverMgmtApp.Controllers
         }
 
         //GET
-        public async Task<IActionResult> FrontHouseInventory()
+        public async Task<IActionResult> FrontHouseInventory(bool? loadFromContext)
         {
-
-            //var items = from i in _summary.Inventory.ToAsyncEnumerable<ItemCount>()
-            //            where i.Item.ItemHouse.HasFlag(WildeRoverItem.House.front)
-            //            orderby i.Item.Type, i.Item.Name
-            //            select i;
-
             var items = from i in _summary.Inventory.ToAsyncEnumerable()
                         where i.Item.ItemHouse.HasFlag(WildeRoverItem.House.front)
                         orderby i.Item.Type, i.Item.Name
                         select i;
 
-
             FrontHouseInventoryViewModel fhivm = new FrontHouseInventoryViewModel();
-            //var temp = await items.ToListAsync();
+            fhivm.SummaryId = _summary.InventorySummaryId;
 
-            fhivm.Inventory.AddRange(await items.ToList());     
+            if (loadFromContext == null || loadFromContext == true)
+            {
+                //Load fhivm with data from items
+
+                foreach(var itemCount in await items.ToList())
+                {
+                    fhivm.Inventory.Add
+                    (
+                        new ItemCount
+                        {
+                            ItemCountId = itemCount.ItemCountId,
+                            Item = itemCount.Item,
+                            Count = itemCount.Count
+                        }
+                    );
+                }
+            }
+            else
+            {
+                foreach(var itemCount in await items.ToList())
+                {
+                    fhivm.Inventory.Add
+                    (
+                        new ItemCount
+                        {
+                            ItemCountId = itemCount.ItemCountId,
+                            Item = itemCount.Item,
+                            Count = 0
+                        }
+                    );
+                }
+            }
 
             return View(fhivm);
         }
@@ -124,10 +150,16 @@ namespace WildeRoverMgmtApp.Controllers
                     throw;
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "InventorySummary");
             }
 
             return View(fhivm);
+        }
+
+        //Change Inventory View Model counts to 0
+        public async Task<IActionResult> Reset()
+        {
+            return RedirectToAction("FrontHouseInventory", new { loadFromContext = false });
         }
 
         //GET

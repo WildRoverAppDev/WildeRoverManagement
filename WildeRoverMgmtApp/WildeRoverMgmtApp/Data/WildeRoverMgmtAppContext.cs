@@ -25,5 +25,7 @@ namespace WildeRoverMgmtApp.Models
 
         public DbSet<WildeRoverMgmtApp.Models.InventorySummary> InventoryLog { get; set; }
 
+        public DbSet<WildeRoverMgmtApp.Models.OrderSummary> OrderLog { get; set; }
+
     }
 }
