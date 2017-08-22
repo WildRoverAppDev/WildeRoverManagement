@@ -33,7 +33,7 @@
         {
             <tr>
                 <td>
-                    <a class="btn" style="text-decoration:none">
+                    <a class="btn" style="text-decoration:none" asp-action="Details" asp-route-id="@item.VendorItemId">
                         @Html.DisplayFor(modelItem => item.Name)
                     </a>
                 </td>
@@ -51,11 +51,6 @@
                     <a class="btn" style="text-decoration:none">
                         @Html.DisplayFor(modelItem => item.Price)
                     </a>
-                </td>
-                <td class="btn-group">
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Edit" asp-route-id="@item.VendorItemId">Edit</a>
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Details" asp-route-id="@item.VendorItemId">Info</a>
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Delete" asp-route-id="@item.VendorItemId">Delete</a>
                 </td>
             </tr>
         }

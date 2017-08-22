@@ -39,7 +39,7 @@
             {
                     <tr>
                         <td>
-                            <a class="btn" style="text-decoration:none">
+                            <a class="btn" style="text-decoration:none" asp-action="Details" asp-route-id="@item.WildeRoverItemId">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </a>
                         </td>
@@ -62,11 +62,6 @@
                             <a class="btn">
                                 @Html.DisplayFor(modelItem => item.SubType)
                             </a>
-                        </td>
-                        <td class="btn-group">
-                            <a class="btn btn-info" style="text-decoration:none" asp-action="Edit" asp-route-id="@item.WildeRoverItemId">Edit</a>
-                            <a class="btn btn-info" style="text-decoration:none" asp-action="Details" asp-route-id="@item.WildeRoverItemId">Info</a>
-                            <a class="btn btn-info" style="text-decoration:none" asp-action="Delete" asp-route-id="@item.WildeRoverItemId">Delete</a>
                         </td>
                     </tr>
                 }

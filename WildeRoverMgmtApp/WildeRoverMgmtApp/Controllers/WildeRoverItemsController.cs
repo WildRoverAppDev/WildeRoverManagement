@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WildeRoverMgmtApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WildeRoverMgmtApp.Controllers
 {
@@ -19,10 +20,12 @@ namespace WildeRoverMgmtApp.Controllers
         }
 
         // GET: WildeRoverItems
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.WildeRoverItem.ToListAsync());
         }
+
 
         // GET: WildeRoverItems/Details/5
         public async Task<IActionResult> Details(int? id)
