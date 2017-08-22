@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace WildeRoverMgmtApp.Models
 {
-    public class WildeRoverMgmtAppContext : IdentityDbContext<User, Role, string>
+    public class WildeRoverMgmtAppContext : IdentityDbContext<User, IdentityRole, string>
     {
         public WildeRoverMgmtAppContext (DbContextOptions<WildeRoverMgmtAppContext> options)
             : base(options)
