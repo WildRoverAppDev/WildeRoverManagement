@@ -1,0 +1,55 @@
+@model WildeRoverMgmtApp.Models.OrderSubmitViewModel
+
+@{
+    ViewData["Title"] = "Submit";
+}
+
+<h2>Order Summary</h2>
+
+<style type="text/css">
+    td {
+        padding: 0 10px 0 10px;
+    }
+
+    th {
+        padding: 0 10px 0 10px;
+    }
+</style>
+
+<h2>
+    @Html.DisplayFor(model => model.Order.Date)
+</h2>
+
+@using (Html.BeginForm("Submit", "OrderSummary", FormMethod.Post))
+{
+    <div>
+        @Html.HiddenFor(model => model.OrderSummaryId)
+        @Html.HiddenFor(model => model.Total)
+        @foreach (var kvp in Model.OrderItems)
+        {
+            <p>
+                <h3>
+                    @Html.DisplayFor(model => kvp.Key)
+                </h3>
+                <div>
+                    <table class="table-striped">
+                        <tbody id="childtable">
+                            @Html.EditorFor(model => kvp.Value)
+                        </tbody>
+                    </table>
+                </div>
+            </p>
+        }
+    </div>
+    <p>
+        <dl class="dl">
+            <dt>Total: </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Total)
+            </dd>
+        </dl>
+    </p>
+    <p>
+        <input type="submit" value="SUBMIT" />
+    </p>
+}

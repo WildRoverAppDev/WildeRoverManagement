@@ -25,7 +25,7 @@
     </table>
     <p>
         <input type="submit" value="Save" />
-        <asp:Button ID="Reset_Button" runat="server" Text="Reset"
-                    Width="81px" OnClientClick="this.form.reset();return false;" />
+        <a class="btn-info" asp-controller="Inventory" asp-action="Reset">Reset</a>
+        <a class="btn-info" asp-controller="InventorySummary" asp-action="Submit" asp-route-id="@Model.SummaryId" >Submit</a>
     </p>
 }
