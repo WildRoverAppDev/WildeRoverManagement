@@ -7,3 +7,12 @@ C:\Users\RizMac\Desktop\WildeRover\WildeRoverMgmtApp\WildeRoverMgmtApp\WildeRove
 C:\Users\RizMac\Desktop\WildeRover\WildeRoverMgmtApp\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.AssemblyInfo.cs
 C:\Users\RizMac\Desktop\WildeRover\WildeRoverMgmtApp\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.dll
 C:\Users\RizMac\Desktop\WildeRover\WildeRoverMgmtApp\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.pdb
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\bin\Debug\netcoreapp1.1\WildeRoverMgmtApp.deps.json
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\bin\Debug\netcoreapp1.1\WildeRoverMgmtApp.runtimeconfig.json
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\bin\Debug\netcoreapp1.1\WildeRoverMgmtApp.runtimeconfig.dev.json
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\bin\Debug\netcoreapp1.1\WildeRoverMgmtApp.dll
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\bin\Debug\netcoreapp1.1\WildeRoverMgmtApp.pdb
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.csprojResolveAssemblyReference.cache
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.AssemblyInfo.cs
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.dll
+C:\Users\Ben\Documents\WildeRoverManagement\WildeRoverMgmtApp\WildeRoverMgmtApp\obj\Debug\netcoreapp1.1\WildeRoverMgmtApp.pdb

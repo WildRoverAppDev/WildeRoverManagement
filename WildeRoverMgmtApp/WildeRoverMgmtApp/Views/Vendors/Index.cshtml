@@ -34,7 +34,7 @@
         {
             <tr>
                 <td>
-                    <a class="btn" style="text-decoration:none">
+                    <a class="btn" style="text-decoration:none" asp-action="Details" asp-route-id="@item.VendorId">
                         @Html.DisplayFor(modelItem => item.Name)
                     </a>
                 </td>
@@ -52,11 +52,6 @@
                     <a class="btn" style="text-decoration:none">
                         @Html.DisplayFor(modelItem => item.PointOfContact)
                     </a>
-                </td>
-                <td class="btn-group">
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Edit" asp-route-id="@item.VendorId">Edit</a>
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Details" asp-route-id="@item.VendorId">Info</a>
-                    <a class="btn btn-info" style="text-decoration:none" asp-action="Delete" asp-route-id="@item.VendorId">Delete</a>
                 </td>
             </tr>
         }

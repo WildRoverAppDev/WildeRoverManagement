@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WildeRoverMgmtApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WildeRoverMgmtApp.Controllers
 {
@@ -19,12 +20,14 @@ namespace WildeRoverMgmtApp.Controllers
         }
 
         // GET: Vendors
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Vendor.ToListAsync());
         }
 
         // GET: Vendors/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,6 +45,7 @@ namespace WildeRoverMgmtApp.Controllers
             return View(vendor);
         }
 
+        [Authorize]
         // GET: Vendors/Create
         public IActionResult Create()
         {
@@ -53,6 +57,7 @@ namespace WildeRoverMgmtApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("VendorId,Name,Phone,EMail,PointOfContact")] Vendor vendor)
         {
             if (ModelState.IsValid)
@@ -65,6 +70,7 @@ namespace WildeRoverMgmtApp.Controllers
         }
 
         // GET: Vendors/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +91,7 @@ namespace WildeRoverMgmtApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("VendorId,Name,Phone,EMail,PointOfContact")] Vendor vendor)
         {
             if (id != vendor.VendorId)
@@ -116,6 +123,7 @@ namespace WildeRoverMgmtApp.Controllers
         }
 
         // GET: Vendors/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +144,7 @@ namespace WildeRoverMgmtApp.Controllers
         // POST: Vendors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vendor = await _context.Vendor.SingleOrDefaultAsync(m => m.VendorId == id);

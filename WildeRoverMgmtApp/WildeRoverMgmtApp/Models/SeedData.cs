@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace WildeRoverMgmtApp.Models
 {
@@ -10,11 +11,14 @@ namespace WildeRoverMgmtApp.Models
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
+            var userManager = serviceProvider.GetService<UserManager<User>>();
+
             using (var context = new WildeRoverMgmtAppContext(
                 serviceProvider.GetRequiredService<DbContextOptions<WildeRoverMgmtAppContext>>()))
             {
                 if (context.WildeRoverItem.Any()) return;  //No need to seed data
 
+                SeedUsers(context, userManager);
                 SeedVendors(context);
                 SeedWildeRoverItems(context);
                 SeedVendorItems(context);
@@ -44,6 +48,23 @@ namespace WildeRoverMgmtApp.Models
 
                 context.Update(wr);
             }
+
+            context.SaveChanges();
+        }
+
+        public static void SeedUsers(WildeRoverMgmtAppContext context, UserManager<User> userManager)
+        {
+            var user0 = new User
+            {
+                UserName = "OscarWilde",
+                LastName = "Wilde",
+                FirstName = "Oscar",
+                PhoneNumber = "425-822-8940",
+                Email = "info@wilderover.com",
+                Privilege = 3
+            };
+
+            var result = userManager.CreateAsync(user0, "P@ssw0rd!").Result;
 
             context.SaveChanges();
         }
