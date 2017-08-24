@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace WildeRoverMgmtApp.Models
 {
-    public class InventorySubmitViewModel
+    public class InventorySummarySubmitViewModel
     {
-        public InventorySubmitViewModel()
+        public InventorySummarySubmitViewModel()
         {
             SubItems = new SortedDictionary<string, List<ItemCount>>();
         }

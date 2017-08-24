@@ -22,6 +22,8 @@ namespace WildeRoverMgmtApp.Models
                 SeedVendors(context);
                 SeedWildeRoverItems(context);
                 SeedVendorItems(context);
+                SeedInventoryArea(context);
+                SeedSlots(context);
 
                 //EagerLoadWildeRoverItems(context);
 
@@ -284,51 +286,6 @@ namespace WildeRoverMgmtApp.Models
             context.SaveChanges();
         }
 
-        //private static void PopulateVendorProducts(WildeRoverMgmtAppContext context)
-        //{
-        //    foreach (var vendor in context.Vendor)
-        //    {
-        //        var items = from i in context.VendorItem
-        //                    where i.Vendor == vendor
-        //                    select i;
-
-        //        foreach (var i in items)
-        //        {
-        //            vendor.Products.Add(i);
-        //        }
-
-        //        context.Update(vendor);
-        //    }
-
-        //    context.SaveChanges();
-        //}
-
-        //    private static void PopulateWildeRoverItemVendorItems(WildeRoverMgmtAppContext context)
-        //    {
-        //        foreach(var wr in context.WildeRoverItem)
-        //        {
-        //            var vItems = from vi in context.VendorItem
-        //                         where vi.Name.ToLower().Contains(wr.Name.ToLower())
-        //                         select vi;
-        //            foreach(var vi in vItems)
-        //            {
-        //                wr.VendorItems.Add(vi);
-        //            }
-
-        //            context.Update(wr);
-        //        }
-
-        //        if (context.SaveChanges() == 0)
-        //        {
-        //            Console.WriteLine("Save Error");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("OK");
-        //        }
-        //    }
-        //}
-
         private static void PopulateVendorItems(WildeRoverMgmtAppContext context)
         {
             var vendorItems = from vi in context.VendorItem
@@ -354,6 +311,111 @@ namespace WildeRoverMgmtApp.Models
             }
 
             context.SaveChanges();
+        }
+
+        private static void SeedInventoryArea(WildeRoverMgmtAppContext context)
+        {
+            context.InventoryAreas.AddRange
+                (
+                    new InventoryArea
+                    {
+                        Name = "Bar1"
+                    },
+
+                    new InventoryArea
+                    {
+                        Name = "Bar2"
+                    },
+
+                    new InventoryArea
+                    {
+                        Name = "Bar3"
+                    }
+
+                );
+
+            context.SaveChanges();
+        }
+
+        private static void SeedSlots(WildeRoverMgmtAppContext context)
+        {
+            var bar1 = (from ia in context.InventoryAreas
+                        where ia.Name == "Bar1"
+                        select ia).SingleOrDefault();
+
+            var bar2 = (from ia in context.InventoryAreas
+                        where ia.Name == "Bar2"
+                        select ia).SingleOrDefault();
+
+            var bar3 = (from ia in context.InventoryAreas
+                        where ia.Name == "Bar3"
+                        select ia).SingleOrDefault();
+
+            var item1 = (from i in context.WildeRoverItem
+                         where i.Name == "Sky"
+                         select i).SingleOrDefault();
+
+            var item2 = (from i in context.WildeRoverItem
+                         where i.Name == "Captain Morgan"
+                         select i).SingleOrDefault();
+
+            var item3 = (from i in context.WildeRoverItem
+                         where i.Name == "Hennessy"
+                         select i).SingleOrDefault();
+
+            var item4 = (from i in context.WildeRoverItem
+                         where i.Name == "Riesling"
+                         select i).SingleOrDefault();
+
+            var item5 = (from i in context.WildeRoverItem
+                         where i.Name == "Bud Light"
+                         select i).SingleOrDefault();
+
+            InventorySlot slot1 = new InventorySlot();
+            slot1.InventoryArea = bar1;
+            slot1.InventoryAreaId = bar1.InventoryAreaId;
+            slot1.Slot = 1;
+            slot1.WildeRoverItem = item1;
+            slot1.WildeRoverItemId = item1.WildeRoverItemId;
+
+            InventorySlot slot2 = new InventorySlot();
+            slot2.InventoryArea = bar1;
+            slot2.InventoryAreaId = bar1.InventoryAreaId;
+            slot2.Slot = 2;
+            slot2.WildeRoverItem = item2;
+            slot2.WildeRoverItemId = item2.WildeRoverItemId;
+
+            InventorySlot slot3 = new InventorySlot();
+            slot3.InventoryArea = bar1;
+            slot3.InventoryAreaId = bar1.InventoryAreaId;
+            slot3.Slot = 3;
+            slot3.WildeRoverItem = item3;
+            slot3.WildeRoverItemId = item3.WildeRoverItemId;
+
+            InventorySlot slot4 = new InventorySlot();
+            slot4.InventoryArea = bar2;
+            slot4.InventoryAreaId = bar2.InventoryAreaId;
+            slot4.Slot = 1;
+            slot4.WildeRoverItem = item4;
+            slot4.WildeRoverItemId = item4.WildeRoverItemId;
+
+            InventorySlot slot5 = new InventorySlot();
+            slot5.InventoryArea = bar2;
+            slot4.InventoryAreaId = bar2.InventoryAreaId;
+            slot5.Slot = 2;
+            slot5.WildeRoverItem = item5;
+            slot5.WildeRoverItemId = item5.WildeRoverItemId;
+
+            InventorySlot slot6 = new InventorySlot();
+            slot6.InventoryArea = bar3;
+            slot6.InventoryAreaId = bar3.InventoryAreaId;
+            slot6.Slot = 1;
+            slot6.WildeRoverItem = item5;
+            slot6.WildeRoverItemId = item5.WildeRoverItemId;
+
+            context.Slots.AddRange(slot1, slot2, slot3, slot4, slot5, slot5, slot6);
+            context.SaveChanges();
+
         }
 
     }

@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = "Front House Inventory";
+
 }
 
 <h2>Front of House Inventory</h2>
 
-@using (Html.BeginForm("FrontHouseInventory", "Inventory", FormMethod.Post))
+@using (Html.BeginForm())
 {
     <table class="table-striped">
         <thead>
@@ -20,12 +21,14 @@
             </tr>
         </thead>
         <tbody id="childtable">
+            @Html.HiddenFor(model => Model.Log.InventoryAreaid)
+            @Html.HiddenFor(model => Model.Log.InventorySummaryId)
             @Html.EditorFor(model => Model.Inventory)
         </tbody>
     </table>
     <p>
-        <input type="submit" value="Save" />
-        <a class="btn-info" asp-controller="Inventory" asp-action="Reset">Reset</a>
-        <a class="btn-info" asp-controller="InventorySummary" asp-action="Submit" asp-route-id="@Model.SummaryId" >Submit</a>
+        <input type="submit" name="save" value="SAVE" formaction="/Inventory/FrontHouseInventorySave" formmethod="post"/>
+        <input type="submit" name="reset" value="RESET" formaction="/Inventory/FrontHouseInventoryReset" formmethod="post" />
+        <input type="submit" name="submit" value="SUBMIT" formaction="/Inventory/FrontHouseInventorySubmit" formmethod="post"/>
     </p>
 }

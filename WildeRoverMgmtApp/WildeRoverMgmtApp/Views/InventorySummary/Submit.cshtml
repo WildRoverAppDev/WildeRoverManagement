@@ -1,4 +1,4 @@
-@model WildeRoverMgmtApp.Models.InventorySubmitViewModel
+@model WildeRoverMgmtApp.Models.InventorySummarySubmitViewModel
 
 @{
     ViewData["Title"] = "Submit";
@@ -22,7 +22,7 @@
 {
     <div>
         @Html.HiddenFor(model => model.InventorySummaryId)
-        @foreach (var kvp in Model.SubItems)
+        @foreach(var kvp in Model.SubItems)
         {
             <p>
                 <h3>

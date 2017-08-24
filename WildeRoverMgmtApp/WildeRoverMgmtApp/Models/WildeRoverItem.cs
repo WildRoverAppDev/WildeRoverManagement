@@ -32,7 +32,7 @@ namespace WildeRoverMgmtApp.Models
         public string SubType { get; set; }
         public House ItemHouse { get; set; }
 
-        public HashSet<VendorItem> VendorItems { get; set; }        
+        public HashSet<VendorItem> VendorItems { get; set; }      
         
         [NotMapped]
         public int Need { get { return Par - Have; } }

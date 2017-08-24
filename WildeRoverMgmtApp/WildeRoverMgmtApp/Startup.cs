@@ -37,7 +37,7 @@ namespace WildeRoverMgmtApp
             services.AddDbContext<WildeRoverMgmtAppContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("WildeRoverMgmtAppContext")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WildeRoverMgmtAppContext>()
                 .AddDefaultTokenProviders();
 
