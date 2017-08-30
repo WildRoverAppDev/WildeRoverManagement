@@ -167,57 +167,9 @@ namespace WildeRoverMgmtApp.Controllers
                     itemCountDict[ic.WildeRoverItemId].Count += ic.Count;
                 }
             }
-            //foreach(var ic in itemCountList)
-            //{
-            //    //check to see if there is a sublist for category
-            //    int index = model.Categories.FindIndex(t => t == ic.Item.Type);
-            //    if (index == -1)
-            //    {
-            //        model.Categories.Add(ic.Item.Type);
-            //        model.SubItems.Add(new List<ItemCount>());
-            //        index = model.SubItems.Count - 1;
-            //    }
-
-            //    model.SubItems[index].Add(ic);
-            //    model.CountCollection.Add(ic);
-                
-            //}
-
-            //foreach(var areaLog in inventory.InventoryAreaLogs)
-            //{
-            //    foreach(var ic in areaLog.Inventory)
-            //    {
-            //        itemCountDict[ic.WildeRoverItemId].Count += ic.Count;
-            //    }
-            //}
-
+  
             return View(model);
 
-            //Dictionary<WildeRoverItem, int> tally = new Dictionary<WildeRoverItem, int>();
-
-            //foreach (var ic in inventory.Inventory)
-            //{
-            //    tally.Add(ic.Item, 0);
-            //}
-
-            ////tally
-            //foreach(var area in inventory.InventoryAreaLogs)
-            //{
-            //    foreach(var ic in area.Inventory)
-            //    {
-            //        tally[ic.Item] += ic.Count;
-            //    }
-            //}
-
-            ////Add ItemCounts
-            //foreach (var category in categories)
-            //{
-            //    var counts = (from kvp in tally
-            //                  where kvp.Key.Type == category
-            //                  select kvp).ToList();
-
-            //    model.SubItems[category] = 
-            //}
         }
 
         //POST
@@ -234,9 +186,30 @@ namespace WildeRoverMgmtApp.Controllers
                 try
                 {
                     //save itemCounts
-                    var summary = await (from log in _context.InventoryLog
+                    var summary = await (from log in _context.InventoryLog.Include("InventoryAreaLogs.Inventory.Item")
                                      where log.InventorySummaryId == isvm.InventorySummaryId
                                      select log).SingleOrDefaultAsync();
+
+                    var items = await (from i in _context.WildeRoverItem
+                                       select i).ToDictionaryAsync(t => t.WildeRoverItemId);
+
+                    //Reset item Have values
+                    foreach(var item in items)
+                    {
+                        item.Value.Have = 0;
+                    }
+
+                    //Save Inventory counts to Item Have
+                    foreach(var log in summary.InventoryAreaLogs)
+                    {
+                        foreach(var item in log.Inventory)
+                        {
+                            WildeRoverItem temp = items[item.WildeRoverItemId];
+                            temp.Have += item.Count;
+
+                            _context.WildeRoverItem.Update(temp);
+                        }
+                    }
 
 
                     //====EMAIL PARTIES HERE====

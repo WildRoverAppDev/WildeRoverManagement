@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WildeRoverMgmtApp.Models;
 
 namespace WildeRoverMgmtApp.Controllers
 {
@@ -16,7 +17,11 @@ namespace WildeRoverMgmtApp.Controllers
                 return RedirectToAction("Home/Index", "WildeRoverItems");
             }
 
-            return View();
+            LoginViewModel model = new LoginViewModel();
+            model.UserName = string.Empty;
+            model.Password = string.Empty;
+
+            return View(model);
         }
     }
 }

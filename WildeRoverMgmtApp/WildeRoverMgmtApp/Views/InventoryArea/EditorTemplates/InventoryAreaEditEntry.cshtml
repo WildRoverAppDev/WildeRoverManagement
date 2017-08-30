@@ -1,0 +1,24 @@
+@using WildeRoverMgmtApp.Models
+@model InventoryAreaEditEntry
+
+<tr>
+    <td>
+        @Html.DisplayFor(m => Model.Slot.Slot)
+    </td>
+    <td>
+        @Html.HiddenFor(m => Model.WildeRoverItemId)
+        @*
+    @Html.DropDownListFor(m => Model.WildeRoverItemId, new SelectList(Model.ItemList, "Value", "Text"))
+        *@
+    </td>
+    <td>
+        <a asp-controller="InventoryArea" asp-action="RemoveSlot" asp-route-slotId="@Model.InventorySlotId" asp-route-areaId="@Model.InventoryAreaId">
+            X
+        </a>
+    </td>
+</tr>
+
+
+
+
+

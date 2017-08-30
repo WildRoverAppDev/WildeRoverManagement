@@ -1,0 +1,22 @@
+@model IEnumerable<WildeRoverMgmtApp.Models.InventoryArea>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Inventory Areas</h2>
+
+    <table class="table-striped">
+        <tbody>
+            @foreach(var area in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="InventoryArea" asp-action="Details" asp-route-id="@area.InventoryAreaId">
+                            @Html.DisplayFor(m => area.Name)
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

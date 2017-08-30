@@ -1,0 +1,46 @@
+@model WildeRoverMgmtApp.Models.InventoryArea
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>
+    @Html.DisplayFor(m => Model.Name)
+</h2>
+<p>
+    @Html.ActionLink("Edit", "Edit", "InventoryArea", new { id = Model.InventoryAreaId})
+</p>
+
+<table class="table-striped">
+    <thead>
+        <tr>
+            <th>
+                Slot
+            </th>
+            <th>
+                Item
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var slot in Model.ItemSlots)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => slot.Slot)
+                </td>
+                <td>
+                    @if (slot.WildeRoverItem != null)
+                    {
+                        <a asp-controller="WildeRoverItem" asp-action="Details" asp-route-id="@slot.WildeRoverItem.WildeRoverItemId">
+                            @Html.DisplayFor(m => slot.WildeRoverItem.Name)
+                        </a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
