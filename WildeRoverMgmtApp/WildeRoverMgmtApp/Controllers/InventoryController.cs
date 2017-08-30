@@ -19,7 +19,7 @@ namespace WildeRoverMgmtApp.Controllers
             _context = context;
 
             //Get latest inventory summary if it exists
-            var current = (from i in _context.InventoryLog.Include("Inventory.Item")
+            var current = (from i in _context.InventoryLog.Include("InventoryAreaLogs.Inventory.Item")
                            orderby i.Date descending
                            select i).FirstOrDefault();
 
@@ -33,32 +33,36 @@ namespace WildeRoverMgmtApp.Controllers
                 _context.InventoryLog.Add(_summary);
                 _context.SaveChanges();
 
-                _summary = (from i in _context.InventoryLog.Include("Inventory.Item")
+                _summary = (from i in _context.InventoryLog.Include("InventoryAreaLogs.Inventory.Item")
                             orderby i.Date descending
                             select i).FirstOrDefault();
 
                 //populate summary
-                var items = (from i in _context.WildeRoverItem
-                             select i).ToList();
+                //var items = (from i in _context.WildeRoverItem
+                //             select i).ToList();
 
-                foreach(var i in items)
-                {
-                    var temp = new ItemCount
-                    {
-                        Item = i,
-                        WildeRoverItemId = i.WildeRoverItemId,
-                        Count = 0
-                    };
+                //foreach(var i in items)
+                //{
+                //    var temp = new ItemCount
+                //    {
+                //        Item = i,
+                //        WildeRoverItemId = i.WildeRoverItemId,
+                //        Count = 0
+                //    };
 
-                    temp.InventorySummary = _summary;
-                    temp.InventorySummaryId = _summary.InventorySummaryId;
-                    temp.OrderSummary = null;
+                //    temp.InventorySummary = _summary;
+                //    temp.InventorySummaryId = _summary.InventorySummaryId;
+                //    temp.OrderSummary = null;
 
-                    _context.ItemCounts.Add(temp);
-                    _summary.Inventory.Add(temp);
-                }
+                //    _context.ItemCounts.Add(temp);
+                //    _summary.Inventory.Add(temp);
+                //}
 
                 _context.InventoryLog.Update(_summary);
+                
+
+                CreateInventoryAreaLogs(_summary);
+
                 _context.SaveChanges();
             }
 
@@ -70,60 +74,155 @@ namespace WildeRoverMgmtApp.Controllers
             //_summary.Inventory.ToAsyncEnumerable<ItemCount>();
         }
 
+        private void CreateInventoryAreaLogs(InventorySummary summary)
+        {
+            var areas = from a in _context.InventoryAreas.Include("ItemSlots.WildeRoverItem")
+                        select a;
+
+            foreach(var area in areas.ToList())
+            {
+                //Create area inventory log
+                InventoryAreaInventoryLog log = new InventoryAreaInventoryLog();
+                log.InventorySummary = summary;
+                log.InventorySummaryId = summary.InventorySummaryId;
+                log.InventoryArea = area;
+                log.InventoryAreaid = area.InventoryAreaId;
+                log.Date = DateTime.Now;
+
+                //Add to context and retrieve Id
+
+                _context.InventoryAreaLogs.Add(log);
+                _context.SaveChanges();
+
+                log = _context.InventoryAreaLogs.Last();
+
+                //populate the Inventory
+                var items = from i in area.ItemSlots
+                            orderby i.Slot ascending
+                            select i.WildeRoverItem;
+
+                foreach(var item in items)
+                {
+                    ItemCount temp = new ItemCount();
+                    temp.InventoryAreaInventoryLog = log;
+                    temp.InventoryAreaInventoryLogId = log.InventoryAreaInventoryLogId;
+                    temp.Item = item;
+                    temp.WildeRoverItemId = item.WildeRoverItemId;
+
+                    _context.ItemCounts.Add(temp);
+
+                    //Add ItemCount to area log
+                    log.Inventory.Add(temp);
+                }
+
+                //Update log
+                _context.InventoryAreaLogs.Update(log);
+
+                //Add area inventory log to summary
+                summary.InventoryAreaLogs.Add(log);
+            }
+
+            //Update summary
+            _context.InventoryLog.Update(summary);
+
+            //_context.SaveChanges();
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        //GET
-        public async Task<IActionResult> FrontHouseInventory(bool? loadFromContext)
+        public async Task<IActionResult> FrontHouseIndex()
         {
-            var items = from i in _summary.Inventory.ToAsyncEnumerable()
-                        where i.Item.ItemHouse.HasFlag(WildeRoverItem.House.front)
-                        orderby i.Item.Type, i.Item.Name
-                        select i;
+            var areas = await (from a in _context.InventoryAreas
+                         select a).ToListAsync();
 
+            return View(areas);
+        }
+                
+        [HttpGet]
+        public async Task<IActionResult> FrontHouseInventory(int id, bool? loadFromContext)
+        {
+            //var items = from i in _summary.Inventory.ToAsyncEnumerable()
+            //            where i.Item.ItemHouse.HasFlag(WildeRoverItem.House.front)
+            //            orderby i.Item.Type, i.Item.Name
+            //            select i;
+
+            //retrieve area log (Get the most recent created)
+
+            //var areaLog = await (from al in _context.InventoryAreaLogs.Include("Inventory.Item")
+            //                     where al.InventoryAreaid == id
+            //                     select al).LastOrDefaultAsync();
+
+            var areaLog = (from al in _summary.InventoryAreaLogs
+                           where al.InventoryAreaid == id
+                           select al).SingleOrDefault();
+
+            if (areaLog == null) return NotFound();
+            
+            //Create View Model
             FrontHouseInventoryViewModel fhivm = new FrontHouseInventoryViewModel();
-            fhivm.SummaryId = _summary.InventorySummaryId;
+            //fhivm.SummaryId = _summary.InventorySummaryId;
+            //fhivm.InventoryAreaLogId = areaLog.InventoryAreaInventoryLogId;
+            fhivm.Log = areaLog;
 
-            if (loadFromContext == null || loadFromContext == true)
+            foreach(var ic in areaLog.Inventory)
             {
-                //Load fhivm with data from items
+                ItemCount temp = new ItemCount();
+                temp.ItemCountId = ic.ItemCountId;
+                temp.Item = ic.Item;
 
-                foreach(var itemCount in await items.ToList())
+                if (loadFromContext == null || loadFromContext == true)
                 {
-                    fhivm.Inventory.Add
-                    (
-                        new ItemCount
-                        {
-                            ItemCountId = itemCount.ItemCountId,
-                            Item = itemCount.Item,
-                            Count = itemCount.Count
-                        }
-                    );
+                    temp.Count = ic.Count;
                 }
-            }
-            else
-            {
-                foreach(var itemCount in await items.ToList())
+                else
                 {
-                    fhivm.Inventory.Add
-                    (
-                        new ItemCount
-                        {
-                            ItemCountId = itemCount.ItemCountId,
-                            Item = itemCount.Item,
-                            Count = 0
-                        }
-                    );
+                    temp.Count = 0;
                 }
+
+                fhivm.Inventory.Add(temp);
             }
 
             return View(fhivm);
+
+            //if (loadFromContext == null || loadFromContext == true)
+            //{
+            //    //Load fhivm with data from items
+
+            //    foreach(var itemCount in await items.ToList())
+            //    {
+            //        fhivm.Inventory.Add
+            //        (
+            //            new ItemCount
+            //            {
+            //                ItemCountId = itemCount.ItemCountId,
+            //                Item = itemCount.Item,
+            //                Count = itemCount.Count
+            //            }
+            //        );
+            //    }
+            //}
+            //else
+            //{
+            //    foreach(var itemCount in await items.ToList())
+            //    {
+            //        fhivm.Inventory.Add
+            //        (
+            //            new ItemCount
+            //            {
+            //                ItemCountId = itemCount.ItemCountId,
+            //                Item = itemCount.Item,
+            //                Count = 0
+            //            }
+            //        );
+            //    }
+            //}
         }
 
         [HttpPost]
-        public async Task<IActionResult> FrontHouseInventory(FrontHouseInventoryViewModel fhivm)
+        public async Task<IActionResult> FrontHouseInventorySave(FrontHouseInventoryViewModel fhivm)
         {
             if (fhivm == null)
                 return NotFound();
@@ -132,16 +231,71 @@ namespace WildeRoverMgmtApp.Controllers
             {
                 try
                 {
-                    foreach(var ic in fhivm.Inventory)
+                    //Update ItemCounts
+                    foreach (var ic in fhivm.Inventory)
                     {
                         var temp = await (from i in _context.ItemCounts
-                                    where i.ItemCountId == ic.ItemCountId
-                                    select i).SingleOrDefaultAsync();
+                                          where i.ItemCountId == ic.ItemCountId
+                                          select i).SingleOrDefaultAsync();
 
                         temp.Count = ic.Count;
 
                         _context.ItemCounts.Update(temp);
-                    }                                 
+                    }
+
+
+                    //Update Save Time
+                    var areaLog = await (from a in _context.InventoryAreaLogs
+                                         where a.InventoryAreaInventoryLogId == fhivm.Log.InventoryAreaid
+                                         select a).SingleOrDefaultAsync();
+
+
+                    //areaLog.Date = DateTime.Now;
+                    _context.InventoryAreaLogs.Update(areaLog);
+
+                    await _context.SaveChangesAsync();
+                    //Save(fhivm);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+
+                //return RedirectToAction("Index", "InventorySummary");
+                return RedirectToAction("FrontHouseInventory", new { id = fhivm.Log.InventoryAreaid, loadFromContext = true });
+            }
+
+            return View(fhivm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FrontHouseInventorySubmit(FrontHouseInventoryViewModel fhivm)
+        {
+            if (fhivm == null) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    foreach (var ic in fhivm.Inventory)
+                    {
+                        var temp = await (from i in _context.ItemCounts
+                                          where i.ItemCountId == ic.ItemCountId
+                                          select i).SingleOrDefaultAsync();
+
+                        temp.Count = ic.Count;
+
+                        _context.ItemCounts.Update(temp);
+                    }
+
+                    //Update Save Time
+                    var areaLog = await (from a in _context.InventoryAreaLogs
+                                         where a.InventoryAreaInventoryLogId == fhivm.Log.InventoryAreaid
+                                         select a).SingleOrDefaultAsync();
+
+
+                    areaLog.Date = DateTime.Now;
+                    _context.InventoryAreaLogs.Update(areaLog);
 
                     await _context.SaveChangesAsync();
                 }
@@ -150,16 +304,16 @@ namespace WildeRoverMgmtApp.Controllers
                     throw;
                 }
 
-                return RedirectToAction("Index", "InventorySummary");
+                return RedirectToAction("Submit", "InventorySummary", new { id = fhivm.Log.InventorySummaryId });
             }
 
             return View(fhivm);
         }
 
-        //Change Inventory View Model counts to 0
-        public async Task<IActionResult> Reset()
+        [HttpPost]
+        public async Task<IActionResult> FrontHouseInventoryReset(FrontHouseInventoryViewModel fhivm)
         {
-            return RedirectToAction("FrontHouseInventory", new { loadFromContext = false });
+            return RedirectToAction("FrontHouseInventory", new { id = fhivm.Log.InventoryAreaid, loadFromContext = false });
         }
 
         //GET

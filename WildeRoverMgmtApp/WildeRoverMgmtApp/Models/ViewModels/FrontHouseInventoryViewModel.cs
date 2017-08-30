@@ -17,7 +17,8 @@ namespace WildeRoverMgmtApp.Models
             Inventory = new List<ItemCount>();
         }
 
-        public int SummaryId { get; set; }
+        //public int InventoryAreaLogId { get; set; }
+        public InventoryAreaInventoryLog Log { get; set; }
 
         public List<ItemCount> Inventory { get; set; }
     }

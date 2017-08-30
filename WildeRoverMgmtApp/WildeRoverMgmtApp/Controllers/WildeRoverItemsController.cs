@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WildeRoverMgmtApp.Controllers
 {
+    [Authorize]
     public class WildeRoverItemsController : Controller
     {
         private readonly WildeRoverMgmtAppContext _context;
@@ -35,7 +36,7 @@ namespace WildeRoverMgmtApp.Controllers
                 return NotFound();
             }
 
-            var wildeRoverItem = await _context.WildeRoverItem.Include(i => i.VendorItems)
+            var wildeRoverItem = await _context.WildeRoverItem.Include("VendorItems.Vendor")
                 .SingleOrDefaultAsync(m => m.WildeRoverItemId == id);
             if (wildeRoverItem == null)
             {

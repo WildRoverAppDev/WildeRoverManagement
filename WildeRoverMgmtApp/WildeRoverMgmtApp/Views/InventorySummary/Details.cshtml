@@ -1,4 +1,4 @@
-@model WildeRoverMgmtApp.Models.InventorySummary
+@model WildeRoverMgmtApp.Models.InventorySummaryDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -6,10 +6,10 @@
 
 <h2>Details</h2>
 <p>
-    @Html.DisplayFor(m => Model.Date)
+    @Html.DisplayFor(m => Model.Summary.Date)
 </p>
 <p>
-    @if (Model.Submitted)
+    @if (Model.Summary.Submitted)
     {
         <div>Inventory Submitted</div>
     }
@@ -23,34 +23,36 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
+                @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Key.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Count)
+                @*Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Value) -->*@
+                Count
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var itemCount in Model.Inventory)
+        @foreach(var kvp in Model.Inventory)
         {
             <tr>
                 <td>
-                    <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@itemCount.Item.WildeRoverItemId">
-                        @Html.DisplayFor(m => itemCount.Item.Name)
+                    <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@kvp.Key.WildeRoverItemId">
+                        @Html.DisplayFor(m => kvp.Key.Name)
                     </a>
                 </td>
                 <td>
-                    @Html.DisplayFor(m => itemCount.Count)
+                    @Html.DisplayFor(m => kvp.Value)
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <p>
-    @if (!Model.Submitted)
+    @if (!Model.Summary.Submitted)
     {
-        <a class="btn-info" asp-controller="Inventory" asp-action="FrontHouseInventory">Edit</a>
-
+        <a class="btn-info" asp-controller="Inventory" asp-action="FrontHouseIndex">Edit</a>
+        <a class="btn-info" asp-controller="InventorySummary" asp-action="Submit" asp-route-id="@Model.Summary.InventorySummaryId">Submit</a>
     }
+    
 </p>
 

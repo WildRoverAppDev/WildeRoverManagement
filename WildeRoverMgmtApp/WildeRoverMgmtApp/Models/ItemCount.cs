@@ -20,10 +20,10 @@ namespace WildeRoverMgmtApp.Models
 
         public int Count { get; set; }
 
-        public int? InventorySummaryId { get; set; }
-        public InventorySummary InventorySummary { get; set; }
-
         public int? OrderSummaryId { get; set; }
         public OrderSummary OrderSummary { get; set; } 
+
+        public int? InventoryAreaInventoryLogId { get; set; }
+        public InventoryAreaInventoryLog InventoryAreaInventoryLog { get; set; }
     }
 }
