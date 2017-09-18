@@ -35,30 +35,6 @@ namespace WildeRoverMgmtApp.Models
 
         public DbSet<WildeRoverMgmtApp.Models.InventoryAreaInventoryLog> InventoryAreaLogs { get; set; }
 
-        //public DbSet<WildeRoverMgmtApp.Models.InventoryAreaWildeRoverItem> InventoryAreaWildeRoverItems { get; set; }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-
-        //    modelBuilder.Entity<InventoryAreaWildeRoverItem>()
-        //            .HasKey(iw => new
-        //            {
-        //                iw.InventoryAreaId,
-        //                iw.WildeRoverItemId
-        //            });
-
-        //    modelBuilder.Entity<InventoryAreaWildeRoverItem>()
-        //        .HasOne(iw => iw.InventoryArea)
-        //        .WithMany(ia => ia.ItemSlots)
-        //        .HasForeignKey(iw => iw.InventoryAreaId);
-
-        //    modelBuilder.Entity<InventoryAreaWildeRoverItem>()
-        //                .HasOne(iw => iw.WildeRoverItem)
-        //                .WithMany(w => w.InventoryAreaPlacements)
-        //                .HasForeignKey(iw => iw.WildeRoverItemId);
-
-        //}
         
     
     }

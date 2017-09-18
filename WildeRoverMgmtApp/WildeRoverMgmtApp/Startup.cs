@@ -57,14 +57,15 @@ namespace WildeRoverMgmtApp
 
                 // Cookie settings
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                options.Cookies.ApplicationCookie.LoginPath = "/Auth/LogIn";
-                options.Cookies.ApplicationCookie.LogoutPath = "/Auth/LogOut";
+                options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+                options.Cookies.ApplicationCookie.LogoutPath = "/Account/Logout";
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
 
             services.AddMvc();
+            services.AddTransient<IMessageService, FileMessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,7 +76,7 @@ namespace WildeRoverMgmtApp
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                
                 app.UseBrowserLink();
             }
             else
@@ -83,9 +84,10 @@ namespace WildeRoverMgmtApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            
 
             app.UseIdentity();
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {

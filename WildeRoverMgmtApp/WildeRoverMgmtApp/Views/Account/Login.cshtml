@@ -1,0 +1,43 @@
+@model WildeRoverMgmtApp.Models.AccountUserViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login">
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input type="password" asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 btn-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a class="btn btn-danger" asp-controller="Home" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+        <div asp-validation-summary="All"></div>
+    </div>
+</form>
+<div class="col-md-offset-2 col-md-10">
+    <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
+</div>
+<div class="col-md-offset-2 col-md-10">
+    <a class="right" asp-controller="Account" asp-action="Register">New User</a>
+</div>
+
+
+

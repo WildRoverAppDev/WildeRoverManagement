@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using WildeRoverMgmtApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace WildeRoverMgmtApp.Controllers
 {
+    [Authorize]
     public class InventorySummaryController : Controller
     {
         private readonly WildeRoverMgmtAppContext _context;
@@ -17,17 +19,21 @@ namespace WildeRoverMgmtApp.Controllers
             _context = context;
         }
 
+        //Main Page for Inventory Summary, shows a list of all InventorySummaries
         public async Task<IActionResult> Index()
         {
             var summaries = from s in _context.InventoryLog
                             orderby s.Date descending
                             select s;
 
-            return View(summaries.ToList());
+            return View(await summaries.ToListAsync());
         }
 
+        //Shows Details of an InventorySummary
+        //id - Id of InventorySummary
         public async Task<IActionResult> Details(int ?id)
         {
+            //Validate
             if (id == null)
             {
                 return NotFound();
@@ -38,11 +44,10 @@ namespace WildeRoverMgmtApp.Controllers
                                    where i.InventorySummaryId == id
                                    select i).SingleOrDefaultAsync();
 
-            //get Inventory Area
+            //Create view model
             InventorySummaryDetailsViewModel model = new InventorySummaryDetailsViewModel();
             model.Summary = summary;
-
-
+            
             //Generate model entries
             var items = await (from i in _context.WildeRoverItem
                                orderby i.Type, i.SubType, i.Name
@@ -53,12 +58,6 @@ namespace WildeRoverMgmtApp.Controllers
                 model.Inventory.Add(item, 0);
             }
 
-
-            //foreach (var ic in summary.Inventory)
-            //{
-            //    model.Inventory.Add(ic.Item, 0);
-            //}
-
             //Calculate inventory
             foreach (var areaLog in summary.InventoryAreaLogs)
             {
@@ -66,52 +65,17 @@ namespace WildeRoverMgmtApp.Controllers
                 {
                     model.Inventory[ic.Item] += ic.Count;
                 }
-            }
-            
+            }            
 
             return View(model);
         }
-
-        ////GET
-        //[HttpGet]
-        //public async Task<IActionResult> Submit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var inventory = await (from i in _context.InventoryLog.Include("Inventory.Item").Include("InventoryAreaLogs.Inventory.Item")
-        //                           where i.InventorySummaryId == id
-        //                           select i).SingleOrDefaultAsync();
-
-        //    InventorySubmitViewModel isvm = new InventorySubmitViewModel();
-        //    isvm.InventorySummaryId = inventory.InventorySummaryId;
-        //    isvm.Summary = inventory;
-
-        //    var types = (from ic in inventory.Inventory
-        //                 select ic.Item.Type).Distinct().OrderBy(i => i);
-
-        //    foreach(var type in types)
-        //    {
-                
-        //        var items = (from ic in inventory.Inventory
-        //                    where ic.Item.Type == type
-        //                    orderby ic.Item.SubType, ic.Item.Name
-        //                    select ic).ToList();
-
-        //        isvm.SubItems.Add(type, items);
-        //    }
-
-        //    return View(isvm);
-
-        //}
+        
+        //Submit Page for InventorySummary
+        //id - Id for InventorySummary
         [HttpGet]
         public async Task<IActionResult> Submit(int? id)
         {
-            if (id == null) return NotFound();
-
-            //Tally Area Inventory Logs
+            if (id == null) return NotFound();  //Validate
 
             //get inventory
             var inventory = await (from i in _context.InventoryLog.Include("InventoryAreaLogs.Inventory.Item")
@@ -123,43 +87,38 @@ namespace WildeRoverMgmtApp.Controllers
                         orderby i.Type, i.SubType, i.Name
                         select i;
 
-            //var items = from ic in inventory.Inventory
-            //            orderby ic.Item.Type, ic.Item.SubType, ic.Item.Name
-            //            select ic;
-
-            //var itemList = items.ToList();
-            //var itemDict = itemList.ToDictionary(t => t.WildeRoverItemId);
-
             var itemList = items.ToList();
 
-            //Get Item Categories
-            //var categories = (from i in inventory.Inventory
-            //                  orderby i.Item.Type ascending
-            //                  select i.Item.Type).Distinct();
-
+            //Create View Model
             InventorySummarySubmitViewModel model = new InventorySummarySubmitViewModel();
             model.Summary = inventory;
             model.InventorySummaryId = inventory.InventorySummaryId;
 
+            //Track new ItemCounts in Dictionary in addition to ViewModel to make tallying
+            //inventory not O(n^3)
             var itemCountDict = new Dictionary<int, ItemCount>();
 
+            //Populate ViewModel Inventory
             foreach(var i in itemList)
             {
-                //check Key for Type
+                //check Key for Type, if not add KeyValuePair
                 if (!model.SubItems.ContainsKey(i.Type))
                 {
                     model.SubItems.Add(i.Type, new List<ItemCount>());
                 }
 
+                //Add itemCount to Value
+
+                //Create ItemCount, set initial inventory count to 0
                 ItemCount temp = new ItemCount();
                 temp.Item = i;
                 temp.Count = 0;
 
-                model.SubItems[i.Type].Add(temp);
+                model.SubItems[i.Type].Add(temp);  //Add
                 itemCountDict[i.WildeRoverItemId] = temp;
             }
             
-
+            //Tally Inventory and update ItemCounts for View Model using Dictionary
             foreach(var areaLog in inventory.InventoryAreaLogs)
             {
                 foreach(var ic in areaLog.Inventory)
@@ -169,13 +128,13 @@ namespace WildeRoverMgmtApp.Controllers
             }
   
             return View(model);
-
         }
 
-        //POST
+        //Submit Post Method
         [HttpPost]
         public async Task<IActionResult> Submit(int? id, InventorySummarySubmitViewModel isvm)
         {
+            //Validate
             if (id == null)
             {
                 return NotFound();
@@ -186,10 +145,13 @@ namespace WildeRoverMgmtApp.Controllers
                 try
                 {
                     //save itemCounts
+
+                    //Get InventorySummary
                     var summary = await (from log in _context.InventoryLog.Include("InventoryAreaLogs.Inventory.Item")
                                      where log.InventorySummaryId == isvm.InventorySummaryId
                                      select log).SingleOrDefaultAsync();
 
+                    //Create Dictionary of Items for O(n) tallying
                     var items = await (from i in _context.WildeRoverItem
                                        select i).ToDictionaryAsync(t => t.WildeRoverItemId);
 
@@ -207,18 +169,21 @@ namespace WildeRoverMgmtApp.Controllers
                             WildeRoverItem temp = items[item.WildeRoverItemId];
                             temp.Have += item.Count;
 
-                            _context.WildeRoverItem.Update(temp);
+                            _context.WildeRoverItem.Update(temp);  //Update context
                         }
                     }
 
+                    //====EMAIL PARTIES HERE===================================
 
-                    //====EMAIL PARTIES HERE====
 
 
+                    //=========================================================
+
+                    //Update InventorySummary status
                     summary.Submitted = true;
-
                     _context.InventoryLog.Update(summary);
-                    await _context.SaveChangesAsync();
+
+                    await _context.SaveChangesAsync();  //Save context
                 }
                 catch (DbUpdateConcurrencyException)
                 {
