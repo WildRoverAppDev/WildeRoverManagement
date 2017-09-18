@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WildeRoverMgmtApp.Controllers
 {
+    [Authorize]
     public class VendorsController : Controller
     {
         private readonly WildeRoverMgmtAppContext _context;

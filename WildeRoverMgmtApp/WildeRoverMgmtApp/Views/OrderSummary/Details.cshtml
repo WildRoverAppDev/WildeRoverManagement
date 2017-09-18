@@ -46,7 +46,7 @@
         }
     </tbody>
 </table>
-<p>
+<div>
     <dl class="dl">
         <dt>Price</dt>
         @if (Model.Completed)
@@ -60,5 +60,14 @@
             <dd>TBD</dd>
         }
     </dl>
-</p>
+</div>
+
+@if (!Model.Completed)
+{
+    <div>
+        <a class="btn-info" asp-controller="OrderSummary" asp-action="Submit" asp-route-id="@Model.OrderSummaryId">
+            Submit
+        </a>
+    </div>
+}
 

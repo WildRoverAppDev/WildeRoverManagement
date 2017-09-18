@@ -43,16 +43,8 @@ namespace WildeRoverMgmtApp.Controllers
                 return NotFound();
             }
 
-            //var vendorItems = from vi in _context.VendorItem
-            //                  where vi.WildeRoverItemId == wildeRoverItem.WildeRoverItemId
-            //                  select vi;
 
-            //foreach (var vi in vendorItems)
-            //{
-            //    wildeRoverItem.VendorItems.Add(vi);
-            //}
-
-                return View(wildeRoverItem);
+            return View(wildeRoverItem);
         }
 
         // GET: WildeRoverItems/Create

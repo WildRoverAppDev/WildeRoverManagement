@@ -1,0 +1,35 @@
+@model WildeRoverMgmtApp.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Account Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-default" asp-controller="Account" asp-action="Edit">Edit</a>
+</div>
+

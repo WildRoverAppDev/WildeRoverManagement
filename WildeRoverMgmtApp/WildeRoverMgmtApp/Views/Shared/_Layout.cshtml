@@ -1,4 +1,13 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿@using WildeRoverMgmtApp.Models
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> userManager
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+
+@{ 
+    var userInfo = await userManager.GetUserAsync(User);
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,6 +73,26 @@
                             <li><a asp-area="" asp-controller="InventoryArea" asp-action="Index">Inventory Areas</a></li>
                         </ul>
                     </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle">
+                                @Html.DisplayFor(m => userInfo.FullName)
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="Account" asp-action="Details">Account Details</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Edit">Edit</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
+                                <li><a asp-area="" asp-controller="Account" asp-action="Logout">Sign Out</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a asp-controller="Account" asp-action="Login">Sign In</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
