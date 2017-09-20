@@ -25,33 +25,12 @@ namespace WildeRoverMgmtApp.Models
                 SeedInventoryArea(context);
                 SeedSlots(context);
 
-                //EagerLoadWildeRoverItems(context);
-
                 //PopulateVendorProducts(context);
                 //PopulateWildeRoverItemVendorItems(context);
                 //PopulateVendorItems(context);
             }
 
             return;
-        }
-
-        private static void EagerLoadWildeRoverItems(WildeRoverMgmtAppContext context)
-        {
-            foreach (var wr in context.WildeRoverItem)
-            {
-                var vendorItems = from vi in context.VendorItem
-                                  where vi.WildeRoverItemId == wr.WildeRoverItemId
-                                  select vi;
-
-                foreach(var vi in vendorItems)
-                {
-                    wr.VendorItems.Add(vi);
-                }
-
-                context.Update(wr);
-            }
-
-            context.SaveChanges();
         }
 
         public static void SeedUsers(WildeRoverMgmtAppContext context, UserManager<User> userManager)
@@ -319,17 +298,20 @@ namespace WildeRoverMgmtApp.Models
                 (
                     new InventoryArea
                     {
-                        Name = "Bar1"
+                        Name = "Bar1",
+                        House = WildeRoverItem.House.front
                     },
 
                     new InventoryArea
                     {
-                        Name = "Bar2"
+                        Name = "Bar2",
+                        House = WildeRoverItem.House.front
                     },
 
                     new InventoryArea
                     {
-                        Name = "Bar3"
+                        Name = "Bar3",
+                        House = WildeRoverItem.House.front
                     }
 
                 );

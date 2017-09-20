@@ -49,7 +49,7 @@ namespace WildeRoverMgmtApp.Controllers
         //Edit an InventoryArea
         //id - id for InventoryArea
         [HttpGet]
-        public async Task<IActionResult>Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? displayCount)
         {
             if (id == null) return NotFound();
 
@@ -66,7 +66,7 @@ namespace WildeRoverMgmtApp.Controllers
                                select i).ToListAsync();
 
             //order InventorySlots in area by their number
-            var slots = area.ItemSlots.OrderBy(t => t.Slot);
+            var slots = area.ItemSlots.OrderBy(t => t.Slot).ToList();
 
             //Create selection list
             List<SelectListItem> selectList = new List<SelectListItem>();
@@ -80,14 +80,14 @@ namespace WildeRoverMgmtApp.Controllers
                 }
             );
             //Create selections for every WildeRoverItem
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 selectList.Add
                 (
                     new SelectListItem
                     {
                         Value = item.WildeRoverItemId.ToString(),
-                        Text = item.Name                        
+                        Text = item.Name
                     }
                 );
             }
@@ -100,25 +100,40 @@ namespace WildeRoverMgmtApp.Controllers
 
             //Populate Slots
             model.SlotList = new List<InventoryAreaEditEntry>();
-            foreach(var slot in slots)
+
+            if (displayCount == null)
+            {
+                displayCount = slots.Count;
+            }
+
+            for (int i = 0; i < displayCount; i++)
             {
                 InventoryAreaEditEntry entry = new InventoryAreaEditEntry();
                 entry.InventoryAreaId = area.InventoryAreaId;
-                entry.InventorySlotId = slot.InventorySlotId;
-                entry.Slot = slot;
-                
-                //If Slot has no WildeRoverItem, set its WildeRoverItemId to 0
-                if (slot.WildeRoverItemId == null)
+                if (i < slots.Count)
                 {
-                    entry.WildeRoverItemId = 0;
+                    entry.InventorySlotId = slots[i].InventorySlotId;
+                    entry.Slot = slots[i].Slot;
+
+                    if (slots[i].WildeRoverItemId == null)
+                    {
+                        entry.WildeRoverItemId = 0;
+                    }
+                    else
+                    {
+                        entry.WildeRoverItemId = (int)slots[i].WildeRoverItemId;
+                    }
                 }
                 else
                 {
-                    entry.WildeRoverItemId = (int)slot.WildeRoverItemId;
-                }               
+                    entry.WildeRoverItemId = 0;
+                    entry.Slot = i + 1;
+                }
 
                 model.SlotList.Add(entry);
             }
+
+            model.SlotDisplayCount = (int)displayCount;
 
             return View(model);
         }
@@ -130,7 +145,7 @@ namespace WildeRoverMgmtApp.Controllers
             if (model == null) return NotFound();
 
             if (ModelState.IsValid)
-            {   
+            {
                 try
                 {
                     //Get area from context
@@ -143,17 +158,46 @@ namespace WildeRoverMgmtApp.Controllers
                     //Create dictionary of ItemSlots for O(1) updates
                     var slotDict = area.ItemSlots.ToDictionary(t => t.InventorySlotId);
 
-                    //Update Slots with data from view model
-                    foreach(var entry in model.SlotList)
+                    //Loop through model.ItemSlots and update context
+                    int i = 0;
+                    while (i < model.SlotDisplayCount || i < area.ItemSlots.Count)
                     {
-                        //Only update if Slot has a WildeRoverItem assigned
-                        if (entry.WildeRoverItemId != 0)
+                        if (i < area.ItemSlots.Count && i < model.SlotDisplayCount)  //Update
                         {
-                            InventorySlot temp = slotDict[entry.InventorySlotId];
-                            temp.WildeRoverItemId = entry.WildeRoverItemId;
+                            var temp = slotDict[model.SlotList[i].InventorySlotId];
+                            if (model.SlotList[i].WildeRoverItemId == 0)
+                            {
+                                temp.WildeRoverItemId = null;
+                            }
+                            else
+                            {
+                                temp.WildeRoverItemId = model.SlotList[i].WildeRoverItemId;
+                            }
+
                             _context.Slots.Update(temp);
                         }
-;                   }
+                        else if (i < model.SlotDisplayCount && i >= area.ItemSlots.Count)  //Add
+                        {
+                            InventorySlot newSlot = new InventorySlot();
+                            newSlot.InventoryAreaId = area.InventoryAreaId;
+                            newSlot.Slot = i + 1;
+                            if (model.SlotList[i].WildeRoverItemId != 0)
+                            {
+                                newSlot.WildeRoverItemId = model.SlotList[i].WildeRoverItemId;
+                            }
+
+                            _context.Slots.Add(newSlot);
+                        }
+                        else if (i >= model.SlotDisplayCount && i < area.ItemSlots.Count)  //Remove
+                        {
+                            var toRemove = area.ItemSlots[i];
+                            area.ItemSlots.RemoveAt(i);
+
+                            _context.Slots.Remove(toRemove);
+                        }
+
+                        i++;
+                    }
 
                     await _context.SaveChangesAsync();  //Save context
 
@@ -170,82 +214,84 @@ namespace WildeRoverMgmtApp.Controllers
 
         //Cancel post method for edit
         [HttpPost]
-        public async Task<IActionResult> EditCancel(InventoryAreaEditViewModel model)
+        public IActionResult EditCancel(InventoryAreaEditViewModel model)
         {
             //redirect back to details page for inventory area
             return RedirectToAction("Details", new { id = model.InventoryAreaId });
         }
 
-        //Add a new InventorySlot to INventoryArea
+        //Add a new InventorySlot to InventoryArea
         //id - Id of InventoryArea
-        public async Task<IActionResult> AddNewSlot(int id)
+        //displayCount - current amount of slots to display in edit page
+        public IActionResult AddNewSlot(int id, int displayCount)
         {
-            //get InventoryArea
-            var area = await (from a in _context.InventoryAreas.Include("ItemSlots")
-                              where a.InventoryAreaId == id
-                              select a).SingleOrDefaultAsync();
-
-            if (area == null) return NotFound();  //Validate
-
-            //Create new Inventory Slot
-            InventorySlot slot = new InventorySlot();
-            slot.InventoryAreaId = area.InventoryAreaId;
-            slot.InventoryArea = area;
-            slot.Slot = area.ItemSlots.Count + 1;            
-
-            //Add InventorySlot to context
-            _context.Slots.Add(slot);
-            
-            //Add InventorySlot to InventoryArea
-            area.ItemSlots.Add(slot);
-            _context.InventoryAreas.Update(area);
-
-            await _context.SaveChangesAsync();  //Save context
-
-            //Refresh Edit page
-            return RedirectToAction("Edit", new { id = id });
+            return RedirectToAction("Edit", new { id = id, displayCount = displayCount + 1 });
         }
 
-        //Remove slot from InventoryArea
-        //areaId - Id of InventoryArea
-        //slotId - Id for InventorySlot to be removed
-        public async Task<IActionResult> RemoveSlot(int areaId, int slotId)
+        //Remove one InventorySlot
+        //id - Id of InventoryArea
+        //displayCount - current amount of slots to display in edit page
+        public IActionResult RemoveSlot(int id, int displayCount)
         {
-            //Get InventoryArea from context
-            var area = await (from a in _context.InventoryAreas.Include("ItemSlots")
-                              where a.InventoryAreaId == areaId
-                              select a).SingleOrDefaultAsync();
+            return RedirectToAction("Edit", new { id = id, displayCount = displayCount - 1 });
+        }         
 
-            if (area == null) return NotFound();  //Validate
+        //Create InventoryArea page
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-            //Get InventorySlot from the InventoryArea
-            var removeSlot = (from s in area.ItemSlots
-                              where s.InventorySlotId == slotId
-                              select s).SingleOrDefault();
-
-            if (removeSlot == null) return NotFound();  //Validate
-
-            int slotNumber = removeSlot.Slot;  //get the Slot number
-
-            //Update other InventorySlots in InventoryArea to get rid of empty slot
-            //Slide all slots after the removed slot up
-            foreach(var s in area.ItemSlots)
+        //Post for Create
+        //areaName - Name of the Inventory area
+        //house - WildeRoverItem.House enum flag
+        [HttpPost]
+        public async Task<IActionResult> Create(string areaName, int house)
+        {
+            if (ModelState.IsValid)
             {
-                if (s.Slot > slotNumber)
+                InventoryArea newArea = new InventoryArea
                 {
-                    s.Slot--;
-                    _context.Update(s);
-                }                    
+                    Name = areaName
+                };
+
+                if ((WildeRoverItem.House)house == WildeRoverItem.House.both)
+                {
+                    newArea.House = WildeRoverItem.House.front | WildeRoverItem.House.back | WildeRoverItem.House.both;
+                }
+
+                _context.InventoryAreas.Add(newArea);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "InventoryArea");
+                    
             }
 
-            //Delete InventorySlot from context
-            _context.Slots.Remove(removeSlot);
+            return View();
+        }
+        
+        //Delete
+        [HttpGet]
+        public Task<IActionResult> Delete(int id)
+        {
+            return DeleteConfirmed(id);
+        }
 
-            //Save Context
+        //Post method for Delete
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var area = await (from a in _context.InventoryAreas
+                        where a.InventoryAreaId == id
+                        select a).SingleOrDefaultAsync();
+
+            if (area == null) return NotFound();
+
+            _context.InventoryAreas.Remove(area);
             await _context.SaveChangesAsync();
 
-            //Refresh Edit page
-            return RedirectToAction("Edit", new { id = areaId });
+            return RedirectToAction("Index", "InventoryArea");
         }
     }
 }

@@ -1,0 +1,32 @@
+@using WildeRoverMgmtApp.Models
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create Inventory Area</h2>
+
+<form method="post" action="Create">
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <label class="col-md-2 control-label">Name</label>
+            <div class="col-md-10">
+                <input name="areaName" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">House</label>
+            <div class="col-md-10">
+                <select class="form-control" name="house" asp-items="Html.GetEnumSelectList<WildeRoverItem.House>()"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 btn-group">
+                <input class="btn btn-success" type="submit" value="Create" />
+                <a class="btn btn-danger" asp-controller="InventoryArea" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+

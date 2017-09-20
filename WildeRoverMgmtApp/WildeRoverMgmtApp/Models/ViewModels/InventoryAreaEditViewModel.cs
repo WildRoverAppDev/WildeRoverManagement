@@ -10,7 +10,8 @@ namespace WildeRoverMgmtApp.Models
     {
         public int InventoryAreaId { get; set; }
         public InventoryArea InventoryArea { get; set; }
-        
+        public int SlotDisplayCount { get; set; }
+
         public List<SelectListItem> ItemList { get; set; }
         public List<InventoryAreaEditEntry> SlotList { get; set; }
     }
@@ -20,7 +21,8 @@ namespace WildeRoverMgmtApp.Models
         public int InventoryAreaId { get; set; }
         public int WildeRoverItemId { get; set; }
         public int InventorySlotId { get; set; }
-        public InventorySlot Slot { get; set; }
+        //public InventorySlot Slot { get; set; }
+        public int Slot { get; set; }
     }
 
     

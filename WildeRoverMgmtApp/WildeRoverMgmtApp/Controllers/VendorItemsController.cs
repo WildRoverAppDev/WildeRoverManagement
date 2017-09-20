@@ -23,7 +23,7 @@ namespace WildeRoverMgmtApp.Controllers
         // GET: VendorItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.VendorItem.ToListAsync());
+            return View(await _context.VendorItem.Include("Vendor").ToListAsync());
         }
 
         // GET: VendorItems/Details/5

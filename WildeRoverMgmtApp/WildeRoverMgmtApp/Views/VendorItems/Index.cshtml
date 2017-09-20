@@ -38,8 +38,8 @@
                     </a>
                 </td>
                 <td>
-                    <a class="btn" style="text-decoration:none">
-                        @Html.DisplayFor(modelItem => item.Vendor)
+                    <a class="btn" style="text-decoration:none" asp-controller="Vendors" asp-action="Details" asp-route-id="@item.VendorId">
+                        @Html.DisplayFor(modelItem => item.Vendor.Name)
                     </a>
                 </td>
                 <td>

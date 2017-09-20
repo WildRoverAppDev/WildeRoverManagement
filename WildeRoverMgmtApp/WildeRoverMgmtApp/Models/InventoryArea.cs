@@ -17,8 +17,10 @@ namespace WildeRoverMgmtApp.Models
 
         [Key]
         public int InventoryAreaId { get; set; }
-        public string Name { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+        [Required]
         public WildeRoverItem.House House { get; set; }
 
         public virtual List<InventorySlot> ItemSlots {get; set;}

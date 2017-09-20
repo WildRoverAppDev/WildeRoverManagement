@@ -11,8 +11,11 @@ namespace WildeRoverMgmtApp.Models
     {
         public enum House
         {
+            [Display(Name = "Front of House")]
             front = 1,
+            [Display(Name = "Back of House")]
             back = 2,
+            [Display(Name = "Front and Back")]
             both = 4
         };
 
