@@ -4,14 +4,14 @@
     ViewData["Title"] = "FrontHouseIndex";
 }
 
-<h2>FrontHouseIndex</h2>
+<h2>Front House Inventory</h2>
 
-<table class="table">
+<table class="table table-hover table-condensed">
     <tbody>
         @foreach(var area in Model)
         {
             <tr>
-                <td>
+                <td class="text-center">
                     <a asp-controller="Inventory" asp-action="FrontHouseInventory" asp-route-id="@area.InventoryAreaId" asp-route-loadFromContext="true">
                         @Html.DisplayFor(m => area.Name)
                     </a>

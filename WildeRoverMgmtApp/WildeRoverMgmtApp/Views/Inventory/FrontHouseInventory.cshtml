@@ -9,14 +9,18 @@
 
 @using (Html.BeginForm())
 {
-    <table class="table-striped">
+    <table class="table table-hover table-condensed">
         <thead>
             <tr style="">
                 <th>
-                    @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
+                    <div class="col-md-8">
+                        @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Item.Name)
+                    </div>                    
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Count)
+                    <div class="col-md-4">
+                        @Html.DisplayNameFor(model => model.Inventory.FirstOrDefault().Count)
+                    </div>                   
                 </th>
             </tr>
         </thead>
@@ -26,9 +30,9 @@
             @Html.EditorFor(model => Model.Inventory)
         </tbody>
     </table>
-    <p>
-        <input type="submit" name="save" value="SAVE" formaction="/Inventory/FrontHouseInventorySave" formmethod="post"/>
-        <input type="submit" name="reset" value="RESET" formaction="/Inventory/FrontHouseInventoryReset" formmethod="post" />
-        <input type="submit" name="submit" value="SUBMIT" formaction="/Inventory/FrontHouseInventorySubmit" formmethod="post"/>
-    </p>
+    <div class="btn-group">
+        <input type="submit" class="btn btn-success" name="save" value="SAVE" formaction="/Inventory/FrontHouseInventorySave" formmethod="post"/>
+        <input type="submit" class="btn btn-danger" name="reset" value="RESET" formaction="/Inventory/FrontHouseInventoryReset" formmethod="post" />
+        <input type="submit" class="btn btn-info" name="submit" value="SUBMIT" formaction="/Inventory/FrontHouseInventorySubmit" formmethod="post"/>
+    </div>
 }

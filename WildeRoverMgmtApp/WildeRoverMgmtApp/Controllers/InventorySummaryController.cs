@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using WildeRoverMgmtApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,13 @@ namespace WildeRoverMgmtApp.Controllers
     [Authorize]
     public class InventorySummaryController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly WildeRoverMgmtAppContext _context;
 
-        public InventorySummaryController(WildeRoverMgmtAppContext context)
+        public InventorySummaryController(WildeRoverMgmtAppContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         //Main Page for Inventory Summary, shows a list of all InventorySummaries
@@ -172,6 +175,14 @@ namespace WildeRoverMgmtApp.Controllers
                             _context.WildeRoverItem.Update(temp);  //Update context
                         }
                     }
+
+                    //Change LastEdited
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null) throw new InvalidOperationException();
+
+                    summary.LastEdited = user.FullName;
+
+                    _context.InventoryLog.Update(summary);
 
                     //====EMAIL PARTIES HERE===================================
 

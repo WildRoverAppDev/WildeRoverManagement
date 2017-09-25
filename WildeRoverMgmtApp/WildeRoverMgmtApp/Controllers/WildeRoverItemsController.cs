@@ -122,22 +122,10 @@ namespace WildeRoverMgmtApp.Controllers
             return View(wildeRoverItem);
         }
 
-        // GET: WildeRoverItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpGet]
+        public Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var wildeRoverItem = await _context.WildeRoverItem
-                .SingleOrDefaultAsync(m => m.WildeRoverItemId == id);
-            if (wildeRoverItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(wildeRoverItem);
+            return DeleteConfirmed(id);
         }
 
         // POST: WildeRoverItems/Delete/5

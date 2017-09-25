@@ -69,34 +69,34 @@ namespace WildeRoverMgmtApp.Controllers
             var slots = area.ItemSlots.OrderBy(t => t.Slot).ToList();
 
             //Create selection list
-            List<SelectListItem> selectList = new List<SelectListItem>();
-            selectList.Add
-            (
-                //Selection if nothing is selected
-                new SelectListItem
-                {
-                    Value = 0.ToString(),
-                    Text = "<Select Item>"
-                }
-            );
-            //Create selections for every WildeRoverItem
-            foreach (var item in items)
-            {
-                selectList.Add
-                (
-                    new SelectListItem
-                    {
-                        Value = item.WildeRoverItemId.ToString(),
-                        Text = item.Name
-                    }
-                );
-            }
+            //List<SelectListItem> selectList = new List<SelectListItem>();
+            //selectList.Add
+            //(
+            //    //Selection if nothing is selected
+            //    new SelectListItem
+            //    {
+            //        Value = 0.ToString(),
+            //        Text = "<Select Item>"
+            //    }
+            //);
+            ////Create selections for every WildeRoverItem
+            //foreach (var item in items)
+            //{
+            //    selectList.Add
+            //    (
+            //        new SelectListItem
+            //        {
+            //            Value = item.WildeRoverItemId.ToString(),
+            //            Text = item.Name
+            //        }
+            //    );
+            //}
 
             //Create view model
             InventoryAreaEditViewModel model = new InventoryAreaEditViewModel();
             model.InventoryAreaId = area.InventoryAreaId;
             model.InventoryArea = area;
-            model.ItemList = selectList;  //assign select list
+            //model.ItemList = selectList;  //assign select list
 
             //Populate Slots
             model.SlotList = new List<InventoryAreaEditEntry>();

@@ -7,11 +7,18 @@
     <h2>Order Log</h2>
 
     <body>
-        <table class="table-hover table-condensed">
+        <table class="table table-hover table-condensed">
             <thead class="thead-inverse">
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Date)
+                        <div class="col-md-5">
+                            @Html.DisplayNameFor(model => model.Date)
+                        </div>
+                    </th>
+                    <th>
+                        <div class="col-md-5">
+                            @Html.DisplayNameFor(model => model.LastEdited)
+                        </div>
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Completed)
@@ -23,18 +30,31 @@
                 {
                     <tr>
                         <td>
-                            <a asp-controller="OrderSummary" asp-action="Details" asp-route-id="@log.OrderSummaryId">
-                                @Html.DisplayFor(modelItem => log.Date)
-                            </a>
+                            <div class="col-md-5">
+                                <a class="btn" asp-controller="OrderSummary" asp-action="Details" asp-route-id="@log.OrderSummaryId">
+                                    @Html.DisplayFor(modelItem => log.Date)
+                                </a>
+                            </div>
                         </td>
-                        @if (log.Completed)
-                        {
-                            <td>Yes</td>
-                        }
-                        else
-                        {
-                            <td>No</td>
-                        }
+                        <td>
+                            <div class="col-md-5">
+                                <a class="btn">
+                                    @Html.DisplayFor(model => log.LastEdited)
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-2">
+                                   @if (log.Completed)
+                                   {
+                                    <a class="btn">Yes</a>                                       
+                                   }
+                                   else
+                                   {
+                                       <a class="btn">No</a>
+                                   }
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>

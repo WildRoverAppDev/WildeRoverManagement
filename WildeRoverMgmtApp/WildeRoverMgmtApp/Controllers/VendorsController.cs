@@ -59,7 +59,7 @@ namespace WildeRoverMgmtApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("VendorId,Name,Phone,EMail,PointOfContact")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("VendorId,Name,Phone,Email,PointOfContact")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
@@ -123,23 +123,9 @@ namespace WildeRoverMgmtApp.Controllers
             return View(vendor);
         }
 
-        // GET: Vendors/Delete/5
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vendor = await _context.Vendor
-                .SingleOrDefaultAsync(m => m.VendorId == id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
-
-            return View(vendor);
+            return DeleteConfirmed(id);
         }
 
         // POST: Vendors/Delete/5
@@ -149,6 +135,8 @@ namespace WildeRoverMgmtApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vendor = await _context.Vendor.SingleOrDefaultAsync(m => m.VendorId == id);
+            if (vendor == null) return NotFound();
+
             _context.Vendor.Remove(vendor);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

@@ -66,6 +66,7 @@ namespace WildeRoverMgmtApp
 
             services.AddMvc();
             services.AddTransient<IMessageService, FileMessageService>();
+            services.AddTransient<SelectOptionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

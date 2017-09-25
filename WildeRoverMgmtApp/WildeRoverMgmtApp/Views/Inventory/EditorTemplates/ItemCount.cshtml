@@ -8,12 +8,16 @@
 
 <tr>
     <td>
-        @Html.HiddenFor(model => model.ItemCountId)
-        <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
-            @Html.DisplayFor(model => model.Item.Name)
-        </a>
+        <div class="col-md-8">
+            @Html.HiddenFor(model => model.ItemCountId)
+            <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
+                @Html.DisplayFor(model => model.Item.Name)
+            </a>
+        </div>
     </td>
     <td>
-       @Html.EditorFor(model => model.Count, new {htmlAttributes = new {@type="number", @value="@Model.Count"}})
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @type = "number", @value = "@Model.Count" } })
+        </div>      
     </td>
 </tr>

@@ -19,6 +19,7 @@ namespace WildeRoverMgmtApp.Models
         [Required]
         public string Password { get; set; }
         [Required]
+        [Display(Name = "Re-Enter Password")]
         public string RePassword { get; set; }
 
         //used for password reset

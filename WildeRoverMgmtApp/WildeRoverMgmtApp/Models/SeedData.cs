@@ -18,12 +18,12 @@ namespace WildeRoverMgmtApp.Models
             {
                 if (context.WildeRoverItem.Any()) return;  //No need to seed data
 
-                SeedUsers(context, userManager);
+                //SeedUsers(context, userManager);
                 SeedVendors(context);
                 SeedWildeRoverItems(context);
                 SeedVendorItems(context);
                 SeedInventoryArea(context);
-                SeedSlots(context);
+                SeedSlots(context);                
 
                 //PopulateVendorProducts(context);
                 //PopulateWildeRoverItemVendorItems(context);
@@ -35,19 +35,30 @@ namespace WildeRoverMgmtApp.Models
 
         public static void SeedUsers(WildeRoverMgmtAppContext context, UserManager<User> userManager)
         {
-            var user0 = new User
+            //var user0 = new User
+            //{
+            //    UserName = "OscarWilde",
+            //    LastName = "Wilde",
+            //    FirstName = "Oscar",
+            //    PhoneNumber = "425-822-8940",
+            //    Email = "info@wilderover.com",
+            //    Privilege = 3
+            //};
+
+            //var result = userManager.CreateAsync(user0, "P@ssw0rd!").Result;
+
+            var user1 = new User
             {
-                UserName = "OscarWilde",
-                LastName = "Wilde",
-                FirstName = "Oscar",
-                PhoneNumber = "425-822-8940",
-                Email = "info@wilderover.com",
-                Privilege = 3
+                Email = "fake@email.com",
+                UserName = "fake@email.com",
+                FirstName = "Rizky",
+                LastName = "Ramdhani",
+                EmailConfirmed = true
             };
 
-            var result = userManager.CreateAsync(user0, "P@ssw0rd!").Result;
+            userManager.CreateAsync(user1, "P4ssword");
 
-            context.SaveChanges();
+            context.SaveChangesAsync();
         }
 
         public static void SeedVendors(WildeRoverMgmtAppContext context)
@@ -59,7 +70,7 @@ namespace WildeRoverMgmtApp.Models
                 {
                     Name = "Safeway",
                     Phone = "(555)555-5555",
-                    EMail = "email@safeway.com",
+                    Email = "email@safeway.com",
                     PointOfContact = "Fred"
                 },
 
@@ -67,7 +78,7 @@ namespace WildeRoverMgmtApp.Models
                 {
                     Name = "QFC",
                     Phone = "(111)111-11111",
-                    EMail = "email@qfc.com",
+                    Email = "email@qfc.com",
                     PointOfContact = "Bob"
                 },
 
@@ -75,7 +86,7 @@ namespace WildeRoverMgmtApp.Models
                 {
                     Name = "Whole Foods",
                     Phone = "(222)222-2222",
-                    EMail = "email@wholefoods.com",
+                    Email = "email@wholefoods.com",
                     PointOfContact = "Tom"
                 }
             );

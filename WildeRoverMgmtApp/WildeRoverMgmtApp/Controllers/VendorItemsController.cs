@@ -23,7 +23,11 @@ namespace WildeRoverMgmtApp.Controllers
         // GET: VendorItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.VendorItem.Include("Vendor").ToListAsync());
+            var items = (from item in _context.VendorItem.Include("Vendor")
+                         orderby item.Vendor.Name, item.Name
+                         select item);
+
+            return View(await items.ToListAsync());
         }
 
         // GET: VendorItems/Details/5
@@ -34,8 +38,8 @@ namespace WildeRoverMgmtApp.Controllers
                 return NotFound();
             }
 
-            var vendorItem = await _context.VendorItem
-                .SingleOrDefaultAsync(m => m.VendorItemId == id);
+            var vendorItem = await _context.VendorItem.Include(m => m.Vendor)
+                .Include(m => m.WildeRoverItem).SingleOrDefaultAsync(m => m.VendorItemId == id);
             if (vendorItem == null)
             {
                 return NotFound();
@@ -46,64 +50,76 @@ namespace WildeRoverMgmtApp.Controllers
 
         // GET: VendorItems/Create
         public IActionResult Create()
-        {
+        {          
             return View();
         }
 
-        // POST: VendorItems/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorItemId,Name,PackSize,Price")] VendorItem vendorItem)
+        public async Task<IActionResult> Create(VendorItem model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vendorItem);
+                if (model.WildeRoverItemId == 0)
+                {
+                    ModelState.AddModelError("WildeRoverItemId", "You must select a house item.");
+                    return View(model);
+                }
+
+                if (model.VendorId == 0)
+                {
+                    ModelState.AddModelError("VendorId", "You must select a vendor.");
+                    return View(model);
+                }
+
+                _context.VendorItem.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "VendorItems");
             }
-            return View(vendorItem);
+
+            return View(model);
         }
 
-        // GET: VendorItems/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var vendorItem = await _context.VendorItem.SingleOrDefaultAsync(m => m.VendorItemId == id);
-            if (vendorItem == null)
-            {
-                return NotFound();
-            }
+            var vendorItem = await (from item in _context.VendorItem
+                                    where item.VendorItemId == id
+                                    select item).SingleOrDefaultAsync();
+            if (vendorItem == null) return NotFound();
+
             return View(vendorItem);
         }
 
-        // POST: VendorItems/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VendorItemId,Name,PackSize,Price")] VendorItem vendorItem)
+        public async Task<IActionResult> Edit(int id, VendorItem model)
         {
-            if (id != vendorItem.VendorItemId)
-            {
-                return NotFound();
-            }
+            if (model == null) return NotFound();
+            if (id != model.VendorItemId) return NotFound();
 
             if (ModelState.IsValid)
             {
+                if (model.VendorId == 0)
+                {
+                    ModelState.AddModelError("VendorId", "You must select a vendor.");
+                    return View(model);
+                }
+
+                if (model.WildeRoverItemId == 0)
+                {
+                    ModelState.AddModelError("WildeRoverItemid", "You must selecta house item.");
+                    return View(model);
+                }
+
                 try
                 {
-                    _context.Update(vendorItem);
+                    _context.VendorItem.Update(model);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch(DbUpdateConcurrencyException)
                 {
-                    if (!VendorItemExists(vendorItem.VendorItemId))
+                    if (!VendorItemExists(model.VendorItemId))
                     {
                         return NotFound();
                     }
@@ -112,27 +128,17 @@ namespace WildeRoverMgmtApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Index", "VendorItems");
             }
-            return View(vendorItem);
+
+            return View(model);
+
         }
 
-        // GET: VendorItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vendorItem = await _context.VendorItem
-                .SingleOrDefaultAsync(m => m.VendorItemId == id);
-            if (vendorItem == null)
-            {
-                return NotFound();
-            }
-
-            return View(vendorItem);
+            return DeleteConfirmed(id).Result;
         }
 
         // POST: VendorItems/Delete/5
@@ -143,7 +149,7 @@ namespace WildeRoverMgmtApp.Controllers
             var vendorItem = await _context.VendorItem.SingleOrDefaultAsync(m => m.VendorItemId == id);
             _context.VendorItem.Remove(vendorItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index" );
         }
 
         private bool VendorItemExists(int id)

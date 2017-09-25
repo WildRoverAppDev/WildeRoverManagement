@@ -8,22 +8,40 @@
 
 <tr>
     <td>
-        @Html.HiddenFor(model => model.ItemCountId)
-        @Html.HiddenFor(model => model.WildeRoverItemId)
-        <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
-            @Html.DisplayFor(model => model.Item.Name)
-        </a>
+        <div class="col-md-4">
+            @Html.HiddenFor(model => model.ItemCountId)
+            @Html.HiddenFor(model => model.WildeRoverItemId)
+            <a class="btn" asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
+                @Html.DisplayFor(model => model.Item.Name)
+            </a>
+        </div>
     </td>
     <td>
-        @Html.DisplayFor(model => model.Item.DefaultVendorItem.Price)
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.DisplayFor(model => model.Item.DefaultVendorItem.Price)
+            </a>
+        </div>
     </td>
     <td>
-        @Html.DisplayFor(model => model.Item.Par)
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.DisplayFor(model => model.Item.Par)
+            </a>
+        </div>
     </td>
     <td>
-        @Html.DisplayFor(model => model.Item.Have)
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.DisplayFor(model => model.Item.Have)
+            </a>
+        </div>
     </td>
     <td>
-       @Html.EditorFor(model => model.Count, new {htmlAttributes = new {@type="number", @value="@Model.Count"}})
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.EditorFor(model => model.Count, new { htmlAttributes = new { @type = "number", @value = "@Model.Count" } })
+            </a>
+        </div>
     </td>
 </tr>

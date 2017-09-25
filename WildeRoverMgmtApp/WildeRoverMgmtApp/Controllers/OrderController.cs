@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using WildeRoverMgmtApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,13 @@ namespace WildeRoverMgmtApp.Controllers
     [Authorize]
     public class OrderController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly WildeRoverMgmtAppContext _context;
         private OrderSummary _order;
 
-        public OrderController(WildeRoverMgmtAppContext context)
+        public OrderController(WildeRoverMgmtAppContext context, UserManager<User> userManager)
         {
+            _userManager = userManager;
             _context = context;
 
             //Get latest OrderSummary  (TODO:  change to also query for user as well)
@@ -97,10 +100,6 @@ namespace WildeRoverMgmtApp.Controllers
                     {
                         //Find existing itemCount from _order
 
-                        //var temp = (from ic in _order.OrderList
-                        //            where itemCount.WildeRoverItemId == ic.WildeRoverItemId
-                        //            select ic).SingleOrDefault();
-
                         ItemCount temp;
                         if (itemCountDict.TryGetValue(itemCount.WildeRoverItemId, out temp))  //ItemCount found
                         {
@@ -126,52 +125,22 @@ namespace WildeRoverMgmtApp.Controllers
                                 temp.OrderSummary = _order;
                                 temp.OrderSummaryId = _order.OrderSummaryId;
                                 temp.WildeRoverItemId = itemCount.WildeRoverItemId;
+                                temp.Count = itemCount.Count;
 
                                 //Add to context
                                 _context.ItemCounts.Add(temp);
 
                                 //Add to OrderSummary
-                                _order.OrderList.Add(temp);
+                                _order.OrderList.Add(temp);                            
                             }
                         }
                     }
 
-                    //    //If something is ordered
-                    //    if (itemCount.Count > 0)
-                    //    {
-                    //        if (temp == null)  //
-                    //        {
-                    //            //Add ItemCount
-                    //            temp = new ItemCount();
-                    //            temp.OrderSummary = _order;
-                    //            temp.OrderSummaryId = _order.OrderSummaryId;
-                    //            temp.WildeRoverItemId = itemCount.WildeRoverItemId;
-                    //            temp.Count = itemCount.Count;
+                    //Update Last Edited
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null) throw new InvalidOperationException();
 
-                    //            _context.ItemCounts.Add(temp);
-
-                    //            _order.OrderList.Add(temp);
-                    //        }
-                    //        else
-                    //        {
-                    //            //Update ItemCount
-                    //            temp.Count = itemCount.Count;
-
-                    //            _context.ItemCounts.Update(temp);
-                    //        }
-
-                    //    }
-                    //    else if (itemCount.Count == 0)
-                    //    {
-                    //        if (temp != null)
-                    //        {
-                    //            //Remove from OrderList
-                    //            _order.OrderList.Remove(temp);
-
-                    //            _context.ItemCounts.Remove(temp);
-                    //        }
-                    //    }
-                    //}
+                    _order.LastEdited = user.FullName;
 
                     //Update context
                     _context.OrderLog.Update(_order);
@@ -189,8 +158,8 @@ namespace WildeRoverMgmtApp.Controllers
         }        
 
         //Reset Post action
-        [HttpPost]
-        public async Task<IActionResult> FrontHouseOrderReset(OrderViewModel model)
+        //[HttpPost]
+        public IActionResult FrontHouseOrderReset()
         {
             //Redirect to FrontHouse setting loadFromContext to false
             return RedirectToAction("FrontHouseOrder", new { loadFromContext = false });
@@ -237,6 +206,7 @@ namespace WildeRoverMgmtApp.Controllers
                                 temp.OrderSummary = _order;
                                 temp.OrderSummaryId = _order.OrderSummaryId;
                                 temp.WildeRoverItemId = itemCount.WildeRoverItemId;
+                                temp.Count = itemCount.Count;
 
                                 //Add to context
                                 _context.ItemCounts.Add(temp);
@@ -246,6 +216,12 @@ namespace WildeRoverMgmtApp.Controllers
                             }
                         }
                     }
+
+                    //Update Last Edited
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null) throw new InvalidOperationException();
+
+                    _order.LastEdited = user.FullName;
 
                     //Update context
                     _context.OrderLog.Update(_order);

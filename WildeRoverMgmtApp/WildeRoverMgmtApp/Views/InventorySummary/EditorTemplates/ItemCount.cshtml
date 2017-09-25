@@ -8,10 +8,18 @@
 
 <tr>
     <td>
-        @Html.HiddenFor(model => model.ItemCountId)
-        @Html.DisplayFor(model => model.Item.Name)
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.ItemCountId)
+            <a class="btn" asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
+                @Html.DisplayFor(model => model.Item.Name)
+            </a>            
+        </div>        
     </td>
     <td>
-        @Html.DisplayFor(model => model.Count)
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.DisplayFor(model => model.Count)
+            </a>
+        </div>
     </td>
 </tr>

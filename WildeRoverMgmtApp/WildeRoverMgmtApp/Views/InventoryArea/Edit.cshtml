@@ -1,3 +1,5 @@
+@inject WildeRoverMgmtApp.SelectOptionService selectOptions
+
 @model WildeRoverMgmtApp.Models.InventoryAreaEditViewModel
 
 @{
@@ -38,7 +40,7 @@
                     </td>
                     <td>
                         <div class="col-md-11">                            
-                            <select asp-for="@Model.SlotList[i].WildeRoverItemId" asp-items="@Model.ItemList" class="form-control"></select>
+                            <select asp-for="@Model.SlotList[i].WildeRoverItemId" asp-items="@selectOptions.ListWildeRoverItems().Result" class="form-control"></select>
                             @Html.HiddenFor(m => m.SlotList[i].WildeRoverItemId)
                         </div>
                     </td>
