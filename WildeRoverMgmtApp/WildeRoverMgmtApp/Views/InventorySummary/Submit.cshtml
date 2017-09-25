@@ -66,29 +66,29 @@
     </div>
 
 
-<div class="modal fade" id="popupModal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>
-                    Submit
-                </h3>
-                <h4 class="modal-title">
-                    @Html.DisplayFor(m => m.Summary.Date)
-                </h4>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to Submit?</p>
-            </div>
-            <div class="modal-footer">
-                <div btn-group>
-                    <input type="submit" class="btn btn-success" value="Yes"/>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+    <div class="modal fade" id="popupModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3>
+                        Submit
+                    </h3>
+                    <h4 class="modal-title">
+                        @Html.DisplayFor(m => m.Summary.Date)
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to Submit?</p>
+                </div>
+                <div class="modal-footer">
+                    <div btn-group>
+                        <input type="submit" class="btn btn-success" value="Yes"/>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+}
 

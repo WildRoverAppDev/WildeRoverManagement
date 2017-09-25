@@ -1,17 +1,141 @@
-﻿@model WildeRoverMgmtApp.Models.WildeRoverItem
+﻿@model WildeRoverMgmtApp.Models.HomeIndexViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
+<h2>WildeRover Management App</h2>
 
+@if(User.Identity.IsAuthenticated)
+{
     <div class="col-md-12">
+        <p>
+            <i>Announcements Placeholder</i>
+        </p>
+    </div>
+    <div class=" col-md-12">
+        <!-- Inventory Table -->
+        <div class="col-md-6">  
+            <div class="text-center">
+                <h4>
+                    <a asp-controller="InventorySummary" asp-action="Index">
+                        Inventory Logs
+                    </a>
+                </h4>
+            </div>
+            <table class="table table-hover table-bordered table-condensed" >
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="col-md-4">
+                                @Html.DisplayNameFor(m => m.InventoryList.FirstOrDefault().Date)
+                            </div>
+                        </th>
+                        <th>
+                            <div class="col-md-2">
+                                @Html.DisplayNameFor(m => m.InventoryList.FirstOrDefault().Submitted)
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var log in Model.InventoryList)
+                    {
+                        <tr>
+                            <td>
+                                <div class="col-md-4">
+                                    <a class="btn" asp-controller="InventorySummary" asp-action="Details" asp-route-id="@log.InventorySummaryId">
+                                        @Html.DisplayFor(m => log.Date)
+                                    </a>                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-md-4">
+                                        @if(log.Submitted)
+                                        {
+                                            <a class="btn">Yes</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn">No</a>
+                                        }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-        <h1>Wilde Rover Product Management App</h1>
-        <p></p>
-        <a asp-controller="WildeRoverItems" asp-action="Index" class="btn btn-lg btn-success">Enter</a> 
+        <!-- Order Table -->
+        <div class="col-md-6">
+            <div class="text-center">
+                <h4>
+                    <a asp-controller="OrderSummary" asp-action="Index">Order Logs</a>
+                </h4>
+            </div>
+            <table class="table table-hover table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="col-md-4">
+                                @Html.DisplayNameFor(m => m.OrderList.FirstOrDefault().Date)
+                            </div>
+                        </th>
+                        <th>
+                            <div class="col-md-2">
+                                @Html.DisplayNameFor(m => m.OrderList.FirstOrDefault().Completed)
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var log in Model.OrderList)
+                    {
+                        <tr>
+                            <td>
+                                <div class="col-md-4">
+                                    <a class="btn" asp-controller="OrderSummary" asp-action="Details" asp-route-id="@log.OrderSummaryId">
+                                        @Html.DisplayFor(m => log.Date)
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-md-2">
+                                    @if(log.Completed)
+                                    {
+                                        <a class="btn">Yes</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn">No</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="center-block">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-lg btn-success">Sign In</a>
+    </div>
+}
+
+@*
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <h1>Wilde Rover Product Management App</h1>
+            <p></p>
+            <a asp-controller="WildeRoverItems" asp-action="Index" class="btn btn-lg btn-success">Enter</a>
+
+        </div>
 
     </div>
-
-</div>
+*@
