@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>VendorItem</h4>
+    <h4>Vendor Item</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -15,6 +15,18 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendor.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendor.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WildeRoverItem.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WildeRoverItem.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PackSize)
@@ -28,10 +40,40 @@
         <dd>
             @Html.DisplayFor(model => model.Price)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PPU)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PPU)
+        </dd>
     </dl>
 </div>
 <div class="btn-group">
     <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.VendorItemId">Edit</a>
-    <a class="btn btn-danger" style="text-decoration:none" asp-action="Delete" asp-route-id="@Model.VendorItemId">Delete</a>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#popupModal">Delete</button>
     <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
+</div>
+
+<div class="modal fade" id="popupModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">
+                    @Html.DisplayFor(m => m.Name)
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <div btn-group>
+                    <a class="btn btn-success" asp-controller="VendorItems" asp-action="Delete" asp-route-id="@Model.VendorItemId">
+                        Yes
+                    </a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

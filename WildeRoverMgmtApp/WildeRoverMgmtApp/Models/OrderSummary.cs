@@ -18,7 +18,12 @@ namespace WildeRoverMgmtApp.Models
         public int OrderSummaryId { get; set; }
         public DateTime Date { get; set; }
         public bool Completed { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal Total { get; set; }
+
+        [Display(Name = "Last Edited By")]
+        public string LastEdited { get; set; }
 
         public virtual List<ItemCount> OrderList { get; set; }
 

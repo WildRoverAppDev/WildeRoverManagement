@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WildeRoverMgmtApp.Models;
 
@@ -13,11 +14,13 @@ namespace WildeRoverMgmtApp.Controllers
     [Authorize]
     public class InventoryController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly WildeRoverMgmtAppContext _context;
         private InventorySummary _summary;
 
-        public InventoryController(WildeRoverMgmtAppContext context)
+        public InventoryController(WildeRoverMgmtAppContext context, UserManager<User> userManager)
         {
+            _userManager = userManager;
             _context = context;
 
             //Get latest inventory summary if it exists
@@ -204,6 +207,16 @@ namespace WildeRoverMgmtApp.Controllers
                     areaLog.Date = DateTime.Now;
                     _context.InventoryAreaLogs.Update(areaLog);
 
+                    //Update Inventory Summary last edited user
+                    var inventorySummary = await (from log in _context.InventoryLog
+                                                  where log.InventorySummaryId == areaLog.InventorySummaryId
+                                                  select log).SingleOrDefaultAsync();
+
+                    var user = await _userManager.GetUserAsync(User);
+
+                    inventorySummary.LastEdited = user.FullName;
+                    _context.InventoryLog.Update(inventorySummary);
+
                     //Save context
                     await _context.SaveChangesAsync();
                     
@@ -256,6 +269,16 @@ namespace WildeRoverMgmtApp.Controllers
                     //update arealog
                     _context.InventoryAreaLogs.Update(areaLog);
 
+                    //Update Inventory Summary last edited user
+                    var inventorySummary = await (from log in _context.InventoryLog
+                                                  where log.InventorySummaryId == areaLog.InventorySummaryId
+                                                  select log).SingleOrDefaultAsync();
+
+                    var user = await _userManager.GetUserAsync(User);
+
+                    inventorySummary.LastEdited = user.FullName;
+                    _context.InventoryLog.Update(inventorySummary);
+
                     //save context
                     await _context.SaveChangesAsync();
                 }
@@ -273,7 +296,7 @@ namespace WildeRoverMgmtApp.Controllers
 
         //Reset Post method for FrontHouseInventory
         [HttpPost]
-        public async Task<IActionResult> FrontHouseInventoryReset(FrontHouseInventoryViewModel fhivm)
+        public  IActionResult FrontHouseInventoryReset(FrontHouseInventoryViewModel fhivm)
         {
             //Redirect to FrontHouseInventory, setting loadFromContext to false
             return RedirectToAction("FrontHouseInventory", new { id = fhivm.Log.InventoryAreaid, loadFromContext = false });

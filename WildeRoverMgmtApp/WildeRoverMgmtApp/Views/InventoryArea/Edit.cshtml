@@ -1,3 +1,5 @@
+@inject WildeRoverMgmtApp.SelectOptionService selectOptions
+
 @model WildeRoverMgmtApp.Models.InventoryAreaEditViewModel
 
 @{
@@ -7,40 +9,59 @@
 <h2>
     @Html.DisplayFor(model => model.InventoryArea.Name)
 </h2>
-
+<hr />
 @using (Html.BeginForm(FormMethod.Post))
 {
-    <table class="table-striped">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <div class="col-m2-1">Slot</div>                    
+                </th>
+                <th>
+                    <div class="col-md-11">Item</div>                    
+                </th>
+            </tr>
+        </thead>
         @Html.HiddenFor(model => Model.InventoryAreaId)
+        @Html.HiddenFor(model => Model.SlotDisplayCount)
         <tbody>
             @for(int i = 0; i < Model.SlotList.Count; i++)
             {
-                @Html.HiddenFor(m => m.SlotList[i].InventorySlotId);
+                @Html.HiddenFor(m => m.SlotList[i].InventorySlotId)
+                @Html.HiddenFor(m => m.SlotList[i].Slot)
                 <tr>
                     <td>
-                        @Html.DisplayFor(m => m.SlotList[i].Slot.Slot)
+                        <div class="col-md-1">
+                            <a class="btn" style="text-decoration:none">
+                                @Html.DisplayFor(m => m.SlotList[i].Slot)
+                            </a>
+                        </div>                        
                     </td>
                     <td>
-                        @Html.DropDownListFor(m => m.SlotList[i].WildeRoverItemId, new SelectList(Model.ItemList, "Value", "Text"))
-                        @Html.HiddenFor(m => m.SlotList[i].WildeRoverItemId)
-                    </td>
-                    <td>
-                        <a asp-controller="InventoryArea" asp-action="RemoveSlot" asp-route-slotId="@Model.SlotList[i].InventorySlotId" asp-route-areaId="@Model.InventoryAreaId">
-                            X
-                        </a>
+                        <div class="col-md-11">                            
+                            <select asp-for="@Model.SlotList[i].WildeRoverItemId" asp-items="@selectOptions.ListWildeRoverItems().Result" class="form-control"></select>
+                            @Html.HiddenFor(m => m.SlotList[i].WildeRoverItemId)
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     <p>
-        <a asp-controller="InventoryArea" asp-action="AddNewSlot" asp-route-id="@Model.InventoryAreaId">
+        <a class="btn btn-default" asp-controller="InventoryArea" asp-action="AddNewSlot" asp-route-id="@Model.InventoryAreaId" asp-route-displayCount="@(Model.SlotDisplayCount)">
             + Add New Slot
         </a>
+        @if (Model.SlotDisplayCount > 0)
+        {
+            <a class="btn btn-default" asp-controller="InventoryArea" asp-action="RemoveSlot" asp-route-id="@Model.InventoryAreaId" asp-route-displayCount="@(Model.SlotDisplayCount)">
+                - Remove Slot
+            </a>
+        }
     </p>
     <p>
-        <input type="submit" value="SAVE" formaction="/InventoryArea/EditSave"/>
-        <input type="submit" value="CANCEL" formaction="/InventoryArea/EditCancel" />
+        <input type="submit" class="btn btn-success" value="SAVE" formaction="/InventoryArea/EditSave"/>
+        <input type="submit" class="btn btn-danger" value="CANCEL" formaction="/InventoryArea/EditCancel" />
     </p>
 }
 

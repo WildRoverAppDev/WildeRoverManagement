@@ -12,7 +12,7 @@ namespace WildeRoverMgmtApp
         {
             var emailMessage = $"To: {email}\nSubject: {subject}\nMessage: {message}\n\n";
 
-            File.AppendAllText("emails.txt", emailMessage);
+            File.AppendAllText("emails.txt", "\n\n" + emailMessage);
 
             return Task.FromResult(0);
         }

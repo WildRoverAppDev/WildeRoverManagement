@@ -7,14 +7,24 @@
 <h2>Index</h2>
 
 <body>
-    <table class="table-hover table-condensed">
+    <hr />
+    <table class="table table-hover table-condensed">
         <thead class="thead-inverse">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Date)
+                    <div class="col-md-5">
+                        @Html.DisplayNameFor(model => model.Date)
+                    </div>                    
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Submitted)
+                    <div class="col-md-5">
+                        @Html.DisplayNameFor(model => model.LastEdited)
+                    </div>                    
+                </th>
+                <th>
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.Submitted)
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -23,18 +33,31 @@
             {
                 <tr>
                     <td>
-                        <a asp-controller="InventorySummary" asp-action="Details" asp-route-id="@log.InventorySummaryId">
-                            @Html.DisplayFor(modelItem => log.Date)
-                        </a>
+                        <div class="col-md-5">
+                            <a class="btn" asp-controller="InventorySummary" asp-action="Details" asp-route-id="@log.InventorySummaryId">
+                                @Html.DisplayFor(modelItem => log.Date)
+                            </a>
+                        </div>
                     </td>
-                    @if (log.Submitted)
-                    {
-                        <td>Yes</td>
-                    }
-                    else
-                    {
-                        <td>No</td>
-                    }
+                    <td>
+                        <div class="col-md-5">
+                            <a class="btn">
+                                @Html.DisplayFor(m => log.LastEdited)
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-2">
+                            @if(log.Submitted)
+                            {
+                                <a class="btn">Yes</a>
+                            }
+                            else
+                            {
+                                <a class="btn">No</a>
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

@@ -117,7 +117,7 @@ namespace WildeRoverMgmtApp.Controllers
 
         //Post for Login page
         [HttpPost]
-        public async Task<IActionResult> Login(AccountUserViewModel model, bool rememberMe = true)
+        public async Task<IActionResult> Login(AccountLoginViewModel model, bool rememberMe = true)
         {
             //Get user using email
             var user = await _userManager.FindByEmailAsync(model.Email);

@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>WildeRoverItem</h4>
+    <h4>WildeRover Item</h4>
     <hr />
     <dl class="dl">
         <dt>
@@ -41,12 +41,6 @@
             @Html.DisplayFor(model => model.SubType)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.InventoryCount)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.InventoryCount)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.DefaultVendorItem)
         </dt>        
             @if (Model.DefaultVendorItem == null)
@@ -59,68 +53,108 @@
             }  
     </dl>
 </div>
-<div>
-    <table class="table-condensed">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Vendor.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PackSize)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Price)
-                </th>
-                <th>
-                    PPU
-                </th>
-            </tr>
-        </thead>
-    <tbody>
-        @if (Model.VendorItems == null)
-            {
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PPU)
-                </td>
-            </tr>
-        }
-        else
-        {
+<div class="container">
+    <h4>
+        <a href="#VendorItems" data-toggle="collapse">
+            Vendor Items<span class="caret" />
+        </a>
+    </h4>
+        <div id="VendorItems" class="collapse">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Vendor.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PackSize)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().Price)
+                        </th>
+                        <th>
+                            PPU
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.VendorItems == null)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(model => model.VendorItems.FirstOrDefault().PPU)
+                            </td>
+                        </tr>
+                    }
+                    else                    {
 
-            @foreach (var vi in Model.VendorItems)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(i => vi.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(i => vi.Vendor.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(i => vi.PackSize)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(i => vi.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(i => vi.PPU)
-                    </td>
-                </tr>
-            }
-
-        }
-
-        </tbody>
-    </table>
-
+                        @foreach (var vi in Model.VendorItems)
+                        {
+                            string trClass;
+                            if (vi.VendorItemId == Model.DefaultVendorItem.VendorItemId)
+                            {
+                                trClass = "bg-info";
+                            }
+                            else
+                            {
+                                trClass = string.Empty;
+                            }
+                            <tr class="@trClass">
+                                <td>
+                                    @Html.DisplayFor(i => vi.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(i => vi.Vendor.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(i => vi.PackSize)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(i => vi.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(i => vi.PPU)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+      </table>
+    </div>
 </div>
+<hr />
 <div class="btn-group">
-    <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.WildeRoverItemId">Edit</a>
-    <a class="btn btn-danger" style="text-decoration:none" asp-action="Delete" asp-route-id="@Model.WildeRoverItemId">Delete</a>
+    <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.WildeRoverItemId">Edit</a>    
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#popupModal">Delete</button>
     <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
+</div>
+
+<div class="modal fade" id="popupModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">
+                    Delete
+                </h3>
+                <h4>
+                    @Html.DisplayFor(m => m.Name)
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to Delete?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <a class="btn btn-success" asp-controller="WildeRoverItems" asp-action="Delete" asp-route-id="@Model.WildeRoverItemId">
+                        Yes
+                    </a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

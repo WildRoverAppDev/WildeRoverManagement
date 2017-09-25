@@ -5,28 +5,48 @@
 }
 
 <h2>Details</h2>
-<p>
-    @Html.DisplayFor(m => Model.Date)
-</p>
-<p>
-    @if (Model.Completed)
-    {
-        <div>Order Submitted</div>
-    }
-    else
-    {
-        <div>Order NOT Submitted</div>
-    }
-</p>
 
-<table class="table-striped">
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(m => m.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(m => m.Completed)
+        </dt>
+        @if(Model.Completed)
+        {
+            <dd><b>Yes</b></dd>
+        }
+        else
+        {
+            <dd><b>No</b></dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(m => m.LastEdited)
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.LastEdited)
+        </dd>
+    </dl>
+</div>
+
+<hr />
+<table class="table table-hover table-condensed">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Name)
+                <div class="col-md-10">
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Name)
+                </div>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Count)
+                <div class="col-md-2">
+                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Count)
+                </div>
             </th>
         </tr>
     </thead>
@@ -35,12 +55,16 @@
         {
             <tr>
                 <td>
-                    <a asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@itemCount.Item.WildeRoverItemId">
-                        @Html.DisplayFor(m => itemCount.Item.Name)
-                    </a>
+                    <div class="col-md-10">
+                        <a class="btn" asp-controller="WildeRoverItems" asp-action="Details" asp-route-id="@itemCount.Item.WildeRoverItemId">
+                            @Html.DisplayFor(m => itemCount.Item.Name)
+                        </a>
+                    </div>
                 </td>
                 <td>
-                    @Html.DisplayFor(m => itemCount.Count)
+                    <div class="col-md-2">
+                        @Html.DisplayFor(m => itemCount.Count)
+                    </div>
                 </td>
             </tr>
         }
@@ -52,22 +76,26 @@
         @if (Model.Completed)
         {
             <dd>
-                @Html.DisplayFor(m => Model.Total)
+                <h3>@Html.DisplayFor(m => Model.Total)</h3>
             </dd>
         }
         else
         {
-            <dd>TBD</dd>
+            <dd><h3>TBD</h3></dd>
         }
     </dl>
 </div>
 
 @if (!Model.Completed)
 {
-    <div>
-        <a class="btn-info" asp-controller="OrderSummary" asp-action="Submit" asp-route-id="@Model.OrderSummaryId">
-            Submit
-        </a>
+    <div class="btn-group">
+        @if (Model.OrderList.Count != 0)
+        {
+            <a class="btn btn-success" asp-controller="OrderSummary" asp-action="Submit" asp-route-id="@Model.OrderSummaryId">
+                Submit
+            </a>
+        }
+        <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
     </div>
 }
 

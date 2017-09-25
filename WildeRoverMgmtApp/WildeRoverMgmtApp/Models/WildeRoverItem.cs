@@ -11,9 +11,12 @@ namespace WildeRoverMgmtApp.Models
     {
         public enum House
         {
+            [Display(Name = "Front of House")]
             front = 1,
+            [Display(Name = "Back of House")]
             back = 2,
-            both = 4
+            [Display(Name = "Front and Back")]
+            both = 3
         };
 
         public WildeRoverItem()
@@ -25,11 +28,22 @@ namespace WildeRoverMgmtApp.Models
 
         [Key]
         public int WildeRoverItemId { get; set; }
+
+        [Display(Name = "House Item")]
         public string Name { get; set; }
+
         public int Par { get; set; }
+
+        [Range(0,int.MaxValue)]
         public int Have { get; set; }
+
+        [Required]
         public string Type { get; set; }
+
+        [Required]
         public string SubType { get; set; }
+
+        [Required]
         public House ItemHouse { get; set; }
 
         public HashSet<VendorItem> VendorItems { get; set; }      
@@ -37,52 +51,87 @@ namespace WildeRoverMgmtApp.Models
         [NotMapped]
         public int Need { get { return Par - Have; } }
 
-        VendorItem _defaultVendorItem;
+        //public int? DefaultVendorItemId { get; set; }
+        //private VendorItem _defaultVendorItem;
         [NotMapped]
         public VendorItem DefaultVendorItem
         {
             get
             {
-                if (_defaultVendorItem == null)
+                decimal minPPU = Decimal.MaxValue;
+                VendorItem returnVal = null;
+                foreach (var item in VendorItems)
                 {
-                    decimal minPPU = Decimal.MaxValue;
-                    VendorItem returnVal = null;
-                    foreach(var item in VendorItems)
+                    decimal pricePerUnit = item.Price / item.PackSize;
+                    if (pricePerUnit < minPPU)
                     {
-                        decimal pricePerUnit = item.Price / item.PackSize;
-                        if (pricePerUnit < minPPU)
-                        {
-                            minPPU = pricePerUnit;
-                            returnVal = item;
-                        }
+                        minPPU = pricePerUnit;
+                        returnVal = item;
                     }
-
-                    return returnVal;
-                }
-                else
-                {
-                    return _defaultVendorItem;
                 }
 
-            }
-            set { _defaultVendorItem = value; }
+                return returnVal;
+            }         
         }
+
+        //public VendorItem GetDefaultVendorItem ()
+        //{
+        //    if (DefaultVendorItemId == null)
+        //    {
+        //        decimal minPPU = Decimal.MaxValue;
+        //        VendorItem returnVal = null;
+        //        foreach (var item in VendorItems)
+        //        {
+        //            decimal pricePerUnit = item.Price / item.PackSize;
+        //            if (pricePerUnit < minPPU)
+        //            {
+        //                minPPU = pricePerUnit;
+        //                returnVal = item;
+        //            }
+        //        }
+
+        //        return returnVal;
+        //    }
+        //    else
+        //    {
+        //        return DefaultVendorItem;
+        //    }
+        //}
+
+        ////[NotMapped]
+        //[Display(Name = "Default Vendor Item")]
+        //public VendorItem DefaultVendorItem
+        //{
+        //    get
+        //    {
+        //        if (DefaultVendorItemId == null)
+        //        {
+        //            decimal minPPU = Decimal.MaxValue;
+        //            VendorItem returnVal = null;
+        //            foreach (var item in VendorItems)
+        //            {
+        //                decimal pricePerUnit = item.Price / item.PackSize;
+        //                if (pricePerUnit < minPPU)
+        //                {
+        //                    minPPU = pricePerUnit;
+        //                    returnVal = item;
+        //                }
+        //            }
+
+        //            return returnVal;
+        //        }
+        //        else
+        //        {
+        //            return _defaultVendorItem;
+        //        }
+
+        //    }
+        //    set { _defaultVendorItem = value; }
+        //}
 
         #endregion Entity
 
         #region IInventoriable
-
-        //int _inventoryCount;
-
-        //public void SetInventory(int count)
-        //{
-        //    if (count < 0)
-        //        throw new ArgumentOutOfRangeException("Argument less than zero.");
-        //    else
-        //        _inventoryCount = count;
-        //}
-
-        public int InventoryCount { get; set; }
 
         //TODO: Implement
         public string ToStringInventory()

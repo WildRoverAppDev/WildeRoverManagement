@@ -9,13 +9,13 @@ namespace WildeRoverMgmtApp.Models
     {
         public OrderSubmitViewModel()
         {
-            OrderItems = new SortedDictionary<string, List<ItemCount>>();
+            OrderItems = new SortedDictionary<Vendor, List<ItemCount>>();
         }
 
         public int OrderSummaryId { get; set; }
         public OrderSummary Order { get; set; }
         public decimal Total { get; set; }
 
-        public SortedDictionary<string, List<ItemCount>> OrderItems { get; set; }
+        public SortedDictionary<Vendor, List<ItemCount>> OrderItems { get; set; }
     }
 }

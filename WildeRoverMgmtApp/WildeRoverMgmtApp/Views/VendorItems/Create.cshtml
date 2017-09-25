@@ -1,3 +1,5 @@
+@inject WildeRoverMgmtApp.SelectOptionService options
+
 @model WildeRoverMgmtApp.Models.VendorItem
 
 @{
@@ -19,6 +21,20 @@
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="WildeRoverItemId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select class="form-control" asp-for="WildeRoverItemId" asp-items="@options.ListWildeRoverItems().Result"></select>
+                <span asp-validation-for="WildeRoverItemId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="VendorId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select class="form-control" asp-for="VendorId" asp-items="@options.ListVendors().Result"></select>
+                <span asp-validation-for="VendorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="PackSize" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="PackSize" class="form-control" />
@@ -37,6 +53,7 @@
                 <input type="submit" value="Save" class="btn btn-success" />
                 <a class="btn btn-danger" asp-action="Index">Cancel</a>
             </div>
+        </div>
     </div>
 </form>
 

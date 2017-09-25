@@ -23,10 +23,10 @@
             @Html.DisplayFor(model => model.Phone)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EMail)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EMail)
+            @Html.DisplayFor(model => model.Email)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.PointOfContact)
@@ -38,6 +38,31 @@
 </div>
 <div class="btn-group">
     <a class="btn btn-success" style="text-decoration:none" asp-action="Edit" asp-route-id="@Model.VendorId">Edit</a>
-    <a class="btn btn-danger" style="text-decoration:none" asp-action="Delete" asp-route-id="@Model.VendorId">Delete</a>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#popupModal">Delete</button>
     <a class="btn btn-info" style="text-decoration:none" href="javascript:history.go(-1)">Back</a>
+</div>
+
+<div class="modal fade" id="popupModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Delete</h3>
+                <h4 class="modal-title">
+                    @Html.DisplayFor(m => m.Name)
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <div btn-group>
+                    <a class="btn btn-success" asp-controller="Vendors" asp-action="Delete" asp-route-id="@Model.VendorId">
+                        Yes
+                    </a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

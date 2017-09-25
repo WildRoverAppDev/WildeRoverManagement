@@ -1,42 +1,53 @@
 @model WildeRoverMgmtApp.Models.OrderViewModel
 
 @{
-    ViewData["Title"] = "FrontHouseOrder";
+    ViewData["Title"] = "Front of House Order";
 }
 
-<style type="text/css">
-    td {
-        padding: 0 10px 0 10px;
-    }
+@*
+    <style type="text/css">
+        td {
+            padding: 0 10px 0 10px;
+        }
 
-    th {
-        padding: 0 10px 0 10px;
-    }
-</style>
+        th {
+            padding: 0 10px 0 10px;
+        }
+    </style>
+*@
 
 
-
-<h2>FrontHouseOrder</h2>
+<h2>Front of House Order</h2>
 
 @using (Html.BeginForm(FormMethod.Post))
 {
-    <table class="table-striped">
+    <table class="table table-hover table-condensed">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Name)
+                    <div class="col-md-4">
+                        @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Name)
+                    </div>                    
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.DefaultVendorItem.Price)
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.DefaultVendorItem.Price)
+                    </div>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Par)
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Par)
+                    </div>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Have)
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Have)
+                    </div>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Need)
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.OrderList.FirstOrDefault().Item.Need)
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -45,9 +56,10 @@
             @Html.HiddenFor(model => Model.OrderId)
         </tbody>
     </table>
-    <p>
-        <input type="submit" formaction="/Order/Save" value="Save" />
-        <input type="submit" formaction="/Order/FrontHouseOrderReset" value="Reset" />
-        <input type="submit" formaction="/Order/Submit" value="Submit" />
-    </p>
+    <div class="btn-group">
+        <input class="btn btn-success" type="submit" formaction="/Order/Save" value="Save" />        
+        <a class="btn btn-warning" asp-controller="Order" asp-action="FrontHouseOrderReset">Reset</a>
+        <a class="btn btn-danger" asp-controller="Home" asp-action="Index">Cancel</a>
+        <input class="btn btn-info" type="submit" formaction="/Order/Submit" value="Submit" />
+    </div>
 }

@@ -49,21 +49,21 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle">Inventory<span /></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle">Inventory<span class="caret"/></a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="Inventory" asp-action="FrontHouseIndex">FOH</a></li>
                             <li><a asp-area="" asp-controller="Inventory" asp-action="BackHouseInventory">BOH</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle">Order<span /></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle">Order<span class="caret"/></a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="Order" asp-action="FrontHouseOrder">FOH</a></li>
                             <li><a asp-area="" asp-controller="Order" asp-action="BackHouseOrder">BOH</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle">Admin<span /></a>
+                        <a data-toggle="dropdown" class="dropdown-toggle">Admin<span class="caret"/></a>
                         <ul class="dropdown-menu">
                             <li><a asp-area="" asp-controller="WildeRoverItems" asp-action="Index">Wilde Rover Items</a></li>
                             <li><a asp-area="" asp-controller="VendorItems" asp-action="Index">Vendor Items</a></li>
@@ -78,6 +78,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle">
                                 @Html.DisplayFor(m => userInfo.FullName)
+                                <span class="caret" />
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Account" asp-action="Details">Account Details</a></li>

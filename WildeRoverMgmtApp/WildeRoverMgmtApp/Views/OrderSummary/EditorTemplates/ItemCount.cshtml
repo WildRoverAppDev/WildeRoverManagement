@@ -8,9 +8,17 @@
 
 <tr>
     <td>
-        @Html.DisplayFor(model => model.Item.Name)
+        <div class="col-md-10">
+            <a class="btn" asp-controller="WildeRoverItem" asp-action="Details" asp-route-id="@Model.Item.WildeRoverItemId">
+                @Html.DisplayFor(model => model.Item.Name)
+            </a>
+        </div>
     </td>
     <td>
-        @Html.DisplayFor(model => model.Count)
+        <div class="col-md-2">
+            <a class="btn">
+                @Html.DisplayFor(model => model.Count)
+            </a>
+        </div>
     </td>
 </tr>

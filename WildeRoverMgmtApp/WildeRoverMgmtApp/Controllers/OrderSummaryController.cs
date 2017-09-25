@@ -69,7 +69,8 @@ namespace WildeRoverMgmtApp.Controllers
             foreach(var itemCount in order.OrderList)
             {
                 List<ItemCount> tempList;
-                string key = itemCount.Item.DefaultVendorItem.Vendor.Name;
+                //int key = itemCount.Item.DefaultVendorItem.Vendor.VendorId;
+                var key = itemCount.Item.DefaultVendorItem.Vendor;
                 if (!osvm.OrderItems.TryGetValue(key, out tempList))  //Key found in view model OrderItems
                 {
                     //Add new dictionary entry

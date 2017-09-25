@@ -11,14 +11,18 @@ namespace WildeRoverMgmtApp.Models
     {
         public InventorySummary()
         {
-            //Inventory = new List<ItemCount>();
+            
         }
 
         [Key]
         public int InventorySummaryId { get; set; }
+
         public DateTime Date { get; set; }
         public bool Submitted { get; set; }
-        //public virtual List<ItemCount> Inventory { get; set; }
+
+        [Display(Name = "Last Edited By")]
+        public string LastEdited { get; set; }
+        
         public virtual List<InventoryAreaInventoryLog> InventoryAreaLogs { get; set; }
 
     }
